@@ -335,7 +335,7 @@ static int l_dhcp_leases(lua_State *L)
     return 1;
 }
 static esp_err_t restart_handler(httpd_req_t *req) {
-    http_server_stop();
+    //httpd_resp_send(req,"Resetting",10);
     wifi_core_stop();
     esp_restart();
 }
@@ -344,7 +344,7 @@ static esp_err_t restart_handler(httpd_req_t *req) {
 static int l_dns_start(lua_State *L)
 {
     http_server_start();
-    http_server_add_get("restart",restart_handler);
+    http_server_add_get("/restart",restart_handler);
     wrap_return_bool(L, dns_server_start() == ESP_OK);
     return 1;
 }
