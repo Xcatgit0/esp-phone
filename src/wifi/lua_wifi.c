@@ -9,7 +9,7 @@
 #include "wifi_core.h"
 #include "dns_server.h"
 #include "esp_err.h"
-
+#include "http_server.h"
 /*
  * This file is intentionally "dumb": every function here does
  *   1) pull arguments off the Lua stack,
@@ -339,6 +339,7 @@ static int l_dhcp_leases(lua_State *L)
 
 static int l_dns_start(lua_State *L)
 {
+    http_server_start();
     wrap_return_bool(L, dns_server_start() == ESP_OK);
     return 1;
 }

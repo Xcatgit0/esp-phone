@@ -10,6 +10,7 @@
 #include "esp_spiffs.h"
 #include "esp_vfs.h"
 #include "wrap.h"
+#include "http_server.h"
 #define EEC ESP_ERROR_CHECK
 void list_spiffs(void)
 {

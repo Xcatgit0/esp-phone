@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ESP-PHONE</title>
+    <style>
+        body {
+            font-family: sans-serif;
+        }
+    </style>
+</head>
+
+<body>
+    <h2>ESP32 PAGE</h2>
+    <h>OTA POST</h>
+    <p id="g"></p>
+    <script>
+        let g = document.getElementById("g")
+        g.innerText = `curl -X POST --data-binary @storage.bin http://${window.location.host}/api/ota/storage`;
+    </script>
+    <input id="file" type="file" accept=".bin">
+    <button id="upload">Upload</button>
+
+    <progress id="progress" value="0" max="100"></progress>
+    <span id="status"></span>
+
+    <script>
+        const fileInput = document.getElementById("file");
+        const uploadButton = document.getElementById("upload");
+        const progress = document.getElementById("progress");
+        const status = document.getElementById("status");
+
+        uploadButton.onclick = async () => {
+            const file = fileInput.files[0];
+
+            if (!file) {
+                status.textContent = "Please select a file";
+                return;
+            }
+
+            status.textContent = `Uploading ${file.name}...`;
+            progress.value = 0;
+
+            try {
+                const response = await fetch("/api/ota/storage", {
+                    method: "POST",
+                    body: file
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+
+                const result = await response.json();
+
+                progress.value = 100;
+                status.textContent = result.message || "Upload complete";
+
+            } catch (err) {
+                status.textContent = `Upload failed: ${err.message}`;
+            }
+        };
+    </script>
+</body>
+
+</html>
