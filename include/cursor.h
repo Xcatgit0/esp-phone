@@ -1,0 +1,51 @@
+#pragma once
+#include <stdint.h>
+#include "freertos/FreeRTOS.h"
+#include "freertos/queue.h"
+#define CURSOR_W 16
+#define CURSOR_H 16
+
+static const uint16_t cursor_window[16] = {
+    0b1000000000000000,
+    0b1100000000000000,
+    0b1110000000000000,
+    0b1111000000000000,
+    0b1111100000000000,
+    0b1111110000000000,
+    0b1111111000000000,
+    0b1111111100000000,
+    0b1111111110000000,
+    0b1111111110000000,
+    0b1111111100000000,
+    0b1111111000000000,
+    0b1111111100000000,
+    0b1110111110000000,
+    0b0000011110000000,
+    0b0000001110000000,
+};
+static const uint16_t cursor_finger[16] = {
+    0b0000011000000000,
+    0b0000011000000000,
+    0b0000011000000000,
+    0b0000011000000000,
+    0b0000011000000000,
+    0b0000011000000000,
+    0b0000011000000000,
+    0b0000011000000000,
+    0b0000011000000000,
+    0b0000011000000000,
+    0b0000011000000000,
+    0b0000011111000000,
+    0b0000011111100000,
+    0b0000011111110000,
+    0b0000011111111000,
+    0b0000001111110000,
+};
+void joystick_init(void);
+extern int cursor_x;
+extern int cursor_y;
+extern uint8_t isSHOW;
+void draw_cursor(void);
+extern esp_lcd_panel_io_handle_t io_handle;
+extern QueueHandle_t drawCursorQueue;
+extern SemaphoreHandle_t trans_done_sem;
