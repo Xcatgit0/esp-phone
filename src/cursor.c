@@ -23,7 +23,8 @@ static adc_oneshot_unit_handle_t adc_handle;
 uint8_t eventDraw;
 void queue_task(void *arg) {
     while(1){
-        if(xQueueReceive(pushQueue,&eventDraw,portMAX_DELAY)==pdPASS) tft_push();
+        if(xQueueReceive(pushQueue,&eventDraw,16)==pdPASS) tft_push();
+        if(xQueueReceive(drawCursorQueue,&eventDraw,16)==pdPASS) draw_cursor();
     }
 }
 static bool on_color_trans_done(

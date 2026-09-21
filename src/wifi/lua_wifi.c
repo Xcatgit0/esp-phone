@@ -334,12 +334,17 @@ static int l_dhcp_leases(lua_State *L)
     }
     return 1;
 }
-
+static esp_err_t restart_handler(httpd_req_t *req) {
+    http_server_stop();
+    wifi_core_stop();
+    esp_restart();
+}
 /* ---- wifi.dns.* -------------------------------------------------------*/
 
 static int l_dns_start(lua_State *L)
 {
     http_server_start();
+    http_server_add_get("restart",restart_handler);
     wrap_return_bool(L, dns_server_start() == ESP_OK);
     return 1;
 }

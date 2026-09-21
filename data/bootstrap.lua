@@ -84,7 +84,7 @@ repeat
                 0,
                 (i - 1) * cols,
                 text,
-                (selected == k) and gfx.rgb(0x3333ff) or 0xffff
+                (selected == k) and gfx.rgb(0x3333ff) or 0xf600
             )
         end
     end

@@ -370,7 +370,7 @@ esp_err_t http_server_start(void)
             return ESP_ERR_NO_MEM;
         }
     }
-
+    s_spiffs_mounted = true;
 
     httpd_config_t config   = HTTPD_DEFAULT_CONFIG();
     config.uri_match_fn     = httpd_uri_match_wildcard; /* needed for "/fs/ *" */

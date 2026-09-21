@@ -19,13 +19,16 @@
     <script>
         let g = document.getElementById("g")
         g.innerText = `curl -X POST --data-binary @storage.bin http://${window.location.host}/api/ota/storage`;
+        function reset() {
+            fetch("/restart");
+        }
     </script>
     <input id="file" type="file" accept=".bin">
     <button id="upload">Upload</button>
 
     <progress id="progress" value="0" max="100"></progress>
     <span id="status"></span>
-
+    <button onclick="reset()">Restart(reset)</button>
     <script>
         const fileInput = document.getElementById("file");
         const uploadButton = document.getElementById("upload");
