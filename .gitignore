@@ -7,3 +7,4 @@ managed_components
 lib
 phone.zip
 dependencies.lock
+data/password.lua
