@@ -93,14 +93,14 @@ void cursor_task(void *arg)
         adc_oneshot_read(adc_handle, JOY_X_CHANNEL, &x);
         adc_oneshot_read(adc_handle, JOY_Y_CHANNEL, &y);
 
-        if (x > 2300)
+        if (x > 2800)
             cursor_x--;
-        else if (x < 1800)
+        else if (x < 1200)
             cursor_x++;
 
-        if (y > 2300)
+        if (y > 2800)
             cursor_y++;
-        else if (y < 1800)
+        else if (y < 1200)
             cursor_y--;
         if (!(oldX == cursor_x && oldY == cursor_y))
         {

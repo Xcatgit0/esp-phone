@@ -371,10 +371,6 @@ esp_err_t http_server_start(void)
         }
     }
 
-    esp_err_t err = storage_mount();
-    if (err != ESP_OK) {
-        return err;
-    }
 
     httpd_config_t config   = HTTPD_DEFAULT_CONFIG();
     config.uri_match_fn     = httpd_uri_match_wildcard; /* needed for "/fs/ *" */
@@ -386,7 +382,7 @@ esp_err_t http_server_start(void)
     /* esp_http_server spawns and owns its own task internally
      * (httpd_start creates it) - we do not create an additional task
      * for the server loop here. */
-    err = httpd_start(&s_server, &config);
+    esp_err_t err = httpd_start(&s_server, &config);
     if (err != ESP_OK) {
         ESP_LOGE(TAG, "httpd_start failed: %s", esp_err_to_name(err));
         storage_unmount();
