@@ -1,3 +1,4 @@
+#include "esp_heap_caps.h"
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -497,11 +498,26 @@ esp_err_t dns_server_hash_init(uint32_t capacity)
     /* keep load factor under ~70% at the caller's requested capacity so
      * probe chains stay short */
     uint32_t alloc_capacity = capacity + (capacity / 3) + 1;
-
-    dns_hash_slot_t *table = calloc(alloc_capacity, sizeof(dns_hash_slot_t));
+	dns_hash_slot_t *table = heap_caps_calloc(
+	    alloc_capacity,
+	    sizeof(dns_hash_slot_t),
+		    MALLOC_CAP_SPIRAM
+	);
+//    dns_hash_slot_t *table = calloc(alloc_capacity, sizeof(dns_hash_slot_t));
     uint32_t bitmap_bytes = (alloc_capacity + 7) / 8;
-    uint8_t *occ = calloc(bitmap_bytes, 1);
-    uint8_t *tomb = calloc(bitmap_bytes, 1);
+//    uint8_t *occ = calloc(bitmap_bytes, 1);
+//    uint8_t *tomb = calloc(bitmap_bytes, 1);
+
+uint8_t *occ = heap_caps_calloc(
+    bitmap_bytes, 1,
+    MALLOC_CAP_SPIRAM
+);
+
+uint8_t *tomb = heap_caps_calloc(
+    bitmap_bytes, 1,
+    MALLOC_CAP_SPIRAM
+);
+
     if (table == NULL || occ == NULL || tomb == NULL) {
         free(table); free(occ); free(tomb);
         ESP_LOGE(TAG, "hash table alloc failed for capacity=%u", (unsigned)capacity);
