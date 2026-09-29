@@ -124,7 +124,14 @@ function Touch.map(rx, ry)
   y = math.max(0, math.min(H - 1, math.floor(y + 0.5)))
   return x, y
 end
-
+  local function spread(t)
+    local lo, hi = t[1], t[1]
+    for i = 2, #t do
+      if t[i] < lo then lo = t[i] end
+      if t[i] > hi then hi = t[i] end
+    end
+    return hi - lo
+  end
 local MAX_SPREAD = 100   -- ค่าดิบต่างกันเกินนี้ถือว่าไม่นิ่ง (ปรับตามที่วัดได้)
 local MIN_VALID  = 3     -- ต้องมี sample ที่กดจริงอย่างน้อยกี่ตัว
 
@@ -146,14 +153,7 @@ function Touch.read(count)
   if #xs < MIN_VALID then return nil end
 
   -- เช็คว่าค่านิ่งพอ (ตัดจังหวะแตะ/ยกนิ้ว)
-  local function spread(t)
-    local lo, hi = t[1], t[1]
-    for i = 2, #t do
-      if t[i] < lo then lo = t[i] end
-      if t[i] > hi then hi = t[i] end
-    end
-    return hi - lo
-  end
+
   if spread(xs) > MAX_SPREAD or spread(ys) > MAX_SPREAD then return nil end
 
   return Touch.map(median(xs), median(ys))
