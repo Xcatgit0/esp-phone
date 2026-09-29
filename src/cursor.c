@@ -105,7 +105,7 @@ void cursor_task(void *arg)
     int x, y;
     x = 0;
     y = 0;
-    int oldX = 0, oldY = 0;
+    int oldX = -1, oldY = -1;
     while (1)
     {
         adc_oneshot_read(adc_handle2, ADC_CHANNEL_1, &raw_x); // GPIO12

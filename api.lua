@@ -49,6 +49,43 @@ function cursor.raw(index) end
 ---Cursor Visibility
 ---@param bool boolean
 function cursor.visible(bool) end
+--- raw touch screen data
+--- @return integer x
+--- @return integer y
+--- @return integer z1
+--- @return integer z2
+function cursor.touch() end
+
+---@class TouchAPI
+touch = {}
+
+---@class TouchCalibration
+---@field a number
+---@field b number
+---@field c number
+---@field d number
+---@field e number
+---@field f number
+
+---@class TouchAPI
+---@field avg_error number ค่า error เฉลี่ยจากการ calibrate หน่วยเป็น pixel
+
+---คำนวณ calibration ใหม่จากค่า sample ที่กำหนดใน api.lua
+---@return TouchCalibration cal
+function touch.recalibrate() end
+
+---แปลงค่า raw touch เป็นพิกัดหน้าจอ
+---@param rx number ค่า raw X
+---@param ry number ค่า raw Y
+---@return integer x พิกัด X ตั้งแต่ 0 ถึง 319
+---@return integer y พิกัด Y ตั้งแต่ 0 ถึง 239
+function touch.map(rx, ry) end
+
+---อ่าน touch หลายครั้งแล้วกรองค่าที่ไม่นิ่งออก
+---@param count? integer จำนวนครั้งที่อ่าน ค่าเริ่มต้นคือ 6
+---@return integer|nil x พิกัด X หรือ nil ถ้าไม่ได้กด/ค่าไม่นิ่ง
+---@return integer|nil y พิกัด Y หรือ nil ถ้าไม่ได้กด/ค่าไม่นิ่ง
+function touch.read(count) end
 
 ---@class Button
 button = {}

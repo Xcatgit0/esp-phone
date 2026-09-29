@@ -176,6 +176,8 @@ wifi.dns.upstream({ "8.8.8.8", "1.1.1.1", "9.9.9.9" })
 wifi.dns.add("example.com", "0.0.0.0")
 wifi.dns.start()
 
+touch = loadfile("/fs/touch.lua")()
+touch.recalibrate()
 while true do
     delay(250)
     gfx.rect(0,0,319,239,0x0000,true)
@@ -189,6 +191,12 @@ while true do
     for k,v in ipairs(devices) do
         pl(startL-1+(k*2),string.format("#%1d %-17s %4d dBm MAC %s",k,v.ip,v.rssi,v.mac))
     end
+    pl(14,string.format("X%.2f Y%.2f Z1 %.2f Z2 %.2f",cursor.touch()))
+    local x,y = touch.read()
+    if not x then x = 0 end
+    if not y then y = 0 end
+    gfx.circle(x,y,10,0xFFFF,true)
+    --print (cursor.touch())
     gfx.push()
 end
 

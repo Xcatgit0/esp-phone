@@ -13,6 +13,7 @@
 #include "tft_gfx.h"
 #include "wrap.h"
 #include "lua_wifi.h"
+#include "hr2046.h"
 static gfx_font_t *lua_loaded_font = NULL;
 
 static int api_gfx_line(lua_State *L)
@@ -263,7 +264,22 @@ int api_rgb_convert(lua_State *L) {
     lua_pushinteger(L,rgb565);
     return 1;
 }
+static int api_touch_raw(lua_State *L)
+{
+    uint16_t x  = hr2046_read_x();
+    uint16_t y  = hr2046_read_y();
+    uint16_t z1 = hr2046_read_z1();
+    uint16_t z2 = hr2046_read_z2();
+
+    lua_pushinteger(L, x);
+    lua_pushinteger(L, y);
+    lua_pushinteger(L, z1);
+    lua_pushinteger(L, z2);
+
+    return 4;
+}
 void API_INIT(lua_State *L) {
+    EEC(hr2046_init());
     lua_newtable(L);
     lua_pushcfunction(L,api_get_button);
     lua_setfield(L,-2,"get");
@@ -283,6 +299,7 @@ void API_INIT(lua_State *L) {
     lua_setfield(L,-2,"pos");
     lua_pushcfunction(L,api_joybutton);
     lua_setfield(L,-2,"isDown");
+    wrap_add_function(L,"touch",api_touch_raw);
     wrap_add_function(L,"raw",api_rawjoy);
     wrap_add_function(L,"visible",api_cursorvisible);
     lua_setglobal(L,"cursor");

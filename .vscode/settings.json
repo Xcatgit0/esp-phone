@@ -1,0 +1,6 @@
+{
+    "Lua.workspace.library": [
+        "${workspaceFolder}/data"
+    ],
+    "Lua.workspace.checkThirdParty": false
+}
