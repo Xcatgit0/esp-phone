@@ -36,14 +36,20 @@ static const uint16_t cursor_finger[16] = {
     0b0000011000000000,
     0b0000011000000000,
     0b0000011111000000,
-    0b0000011111100000,
-    0b0000011111110000,
+    0b0000111111100000,
+    0b0000111111110000,
     0b0000011111111000,
     0b0000001111110000,
 };
 void joystick_init(void);
 extern int cursor_x;
 extern int cursor_y;
+extern float sec_x;
+extern float sec_y;
+extern float pri_x;
+extern float pri_y;
+extern int raw_x, raw_y;
+extern int cursor_visible;
 extern uint8_t isSHOW;
 void draw_cursor(void);
 extern esp_lcd_panel_io_handle_t io_handle;

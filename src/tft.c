@@ -134,11 +134,11 @@ esp_err_t tft_init(void)
 
     ESP_ERROR_CHECK(
         esp_lcd_panel_init(panel));
-    ESP_ERROR_CHECK(esp_lcd_panel_io_tx_param(io_handle, 0x21, NULL, 0)); // INVON
+        //ESP_ERROR_CHECK(esp_lcd_panel_io_tx_param(io_handle, 0x21, NULL, 0)); // INVON
     ESP_ERROR_CHECK(esp_lcd_panel_io_tx_param(io_handle, 0xB0, (uint8_t[]){0x00,0xE8}, 2));
     ESP_ERROR_CHECK(esp_lcd_panel_swap_xy(panel, true));
     ESP_ERROR_CHECK(esp_lcd_panel_mirror(panel, true, false));
-    ESP_ERROR_CHECK(esp_lcd_panel_set_gap(panel, 0, 35));
+    ESP_ERROR_CHECK(esp_lcd_panel_set_gap(panel, 0, 0));
     ESP_ERROR_CHECK(
         esp_lcd_panel_disp_on_off(
             panel,

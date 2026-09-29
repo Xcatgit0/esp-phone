@@ -170,7 +170,36 @@ int api_joybutton(lua_State *L) {
     wrap_return_number(L,gpio_get_level(GPIO_NUM_46));
     return 1;
 }
+int api_rawjoy(lua_State *L)
+{
+    int index = luaL_checkinteger(L, 1);
 
+    //LOG_INFO("index = %d", index);
+
+    if (index == 1) {
+        lua_pushnumber(L, pri_x);
+        lua_pushnumber(L, pri_y);
+        lua_pushinteger(L, gpio_get_level(GPIO_NUM_46));
+        return 3;
+    }
+
+    if (index == 2) {
+        lua_pushnumber(L, sec_x);
+        lua_pushnumber(L, sec_y);
+        lua_pushinteger(L, gpio_get_level(GPIO_NUM_14));
+        return 3;
+    }
+
+    lua_pushnumber(L, 0);
+    lua_pushnumber(L, 0);
+    lua_pushinteger(L, 1);
+    return 3;
+}
+int api_cursorvisible(lua_State *L) {
+    int visible = lua_toboolean(L,1);
+    cursor_visible = visible;
+    return 0;
+}
 
 void debug_dump_tasks(void)
 {
@@ -206,7 +235,6 @@ const gpio_num_t buttons[] = {GPIO_NUM_9,GPIO_NUM_10,GPIO_NUM_11};
 int api_init_button(lua_State *L) {
     for (int i=0;i<3;i++) {
         gpio_set_direction(buttons[i],GPIO_MODE_INPUT);
-        gpio_pulldown_en(buttons[i]);
         gpio_pullup_dis(buttons[i]);
     }
     return 0;
@@ -247,12 +275,18 @@ void API_INIT(lua_State *L) {
     ESP_ERROR_CHECK(gpio_set_direction(GPIO_NUM_46,GPIO_MODE_INPUT));
     ESP_ERROR_CHECK(gpio_set_pull_mode(GPIO_NUM_46,GPIO_PULLUP_ENABLE));
     ESP_ERROR_CHECK(gpio_set_pull_mode(GPIO_NUM_46,GPIO_PULLDOWN_DISABLE));
+    ESP_ERROR_CHECK(gpio_set_direction(GPIO_NUM_14,GPIO_MODE_INPUT));
+    ESP_ERROR_CHECK(gpio_set_pull_mode(GPIO_NUM_14,GPIO_PULLUP_ENABLE));
+    ESP_ERROR_CHECK(gpio_set_pull_mode(GPIO_NUM_14,GPIO_PULLDOWN_DISABLE));
     lua_newtable(L);
     lua_pushcfunction(L,api_getcursor);
     lua_setfield(L,-2,"pos");
     lua_pushcfunction(L,api_joybutton);
     lua_setfield(L,-2,"isDown");
+    wrap_add_function(L,"raw",api_rawjoy);
+    wrap_add_function(L,"visible",api_cursorvisible);
     lua_setglobal(L,"cursor");
+
     lua_newtable(L);    
     lua_pushcfunction(L, api_time_millis);
     lua_setfield(L, -2, "millis");

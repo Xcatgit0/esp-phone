@@ -12,7 +12,7 @@
 #include "driver/spi_master.h"
 
 #define LCD_WIDTH  320
-#define LCD_HEIGHT 170
+#define LCD_HEIGHT 240
 
 esp_err_t tft_init(void);
 

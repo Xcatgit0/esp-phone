@@ -6,39 +6,43 @@ gfx.loadfont("/fs/font.psf")
 print(memory.used())
 gfx.text(10,5,"Hello World!",0xFFFF)
 gfx.push()
+local W = 320
+local H = 240
+
 local colors = {
-        0x0000, -- Black
-        0xF800, -- Red
-        0x07E0, -- Green
-        0x001F, -- Blue
-        0xFFE0, -- Yellow
-        0x07FF, -- Cyan
-        0xF81F, -- Magenta
-        0xFFFF, -- White
-        0x8410, -- Gray
-        0x8000, -- Dark Red
-        0x0400, -- Dark Green
-        0x0010, -- Dark Blue
-        0x8400, -- Olive
-        0x0410, -- Dark Cyan
-        0x8010, -- Dark Purple
-        0xC618  -- Light Gray
-    }
+    0xF800, -- Red
+    0x07E0, -- Green
+    0x001F, -- Blue
+    0xFFE0, -- Yellow
+    0x07FF, -- Cyan
+    0xF81F, -- Magenta
+    0xFFFF, -- White
+    0x0000, -- Black
+}
 
-    local size = 20
+local barH = math.floor(H / #colors)
 
-    for i, color in ipairs(colors) do
-        local x = ((i - 1) % 4) * size
-        local y = 25 + math.floor((i - 1) / 4) * size
+for i, color in ipairs(colors) do
+    local y = (i - 1) * barH
 
-        gfx.rect(x, y, size, size, color, true)
-       --print(i)
-    end
-    print(memory.used())
+    gfx.rect(
+        0,
+        y,
+        W,
+        barH,
+        color,
+        true
+    )
+end
+
 gfx.push()
+delay(500)
+gfx.rect(0,0,319,239,0x0000,true)
+gfx.push()
+delay(250)
 print("init buttons")
 button.init()
-gfx.rect(0,0,169,319,0x0000,true)
+gfx.rect(0,0,319,239,0x0000,true)
 print("starting wifi")
 wifi.mode("apsta")
 wifi.ap.config({
@@ -53,7 +57,7 @@ wifi.start()
 wifi.sta.disconnect()
 local networks = wifi.scan()
 local cols = 16
-local maxLines = 10
+local maxLines = 15
 
 local selected = 1
 local offset = 1
@@ -63,7 +67,7 @@ local ssid = ""
 local entered = false
 
 repeat
-    gfx.rect(0,0,319,169,0x0000,true)
+    gfx.rect(0,0,319,239,0x0000,true)
 
     -- ทำให้ selected อยู่ในช่วงที่แสดง
     if selected < offset then
@@ -122,7 +126,7 @@ repeat
     until changed
 
 until entered
-gfx.rect(0,0,319,169,0x0000,true)
+gfx.rect(0,0,319,239,0x0000,true)
 gfx.text(20,20,"Finding Password in password.lua",0xffff)
 gfx.push()
 ssid = networks[selected].ssid
@@ -142,7 +146,8 @@ end
 print("Connecting",ssid,password)
 wifi.sta.config({ ssid = ssid, password = password })
 wifi.sta.connect()
-gfx.rect(0,0,319,169,0x0000,true)
+delay(500)
+gfx.rect(0,0,319,239,0x0000,true)
 local function pl(l,text,fg,bg) 
     gfx.text(1,l*cols,text,fg or 0xffff,bg or 0x0000)
 end
@@ -173,7 +178,7 @@ wifi.dns.start()
 
 while true do
     delay(250)
-    gfx.rect(0,0,319,169,0x0000,true)
+    gfx.rect(0,0,319,239,0x0000,true)
     local status = wifi.status()
     pl(0,"SoftAP: "..ok(status.started).." Net Sharing: "..tostring(wifi.net.sharing()).." Route:"..wifi.net.route())
     pl(1,"STA: "..ok(status.sta.connected).." AP: "..ok(status.ap.started).. " UpTime: "..string.format("%.1f min %.1f secs",time.millis()/1000/60,(time.millis()/1000)%60))
@@ -182,7 +187,7 @@ while true do
     local devices = wifi.ap.clients()
     local startL = 4
     for k,v in ipairs(devices) do
-        pl(startL-1+k,string.format("#%1d %-17s %4d dBm MAC %s",k,v.ip,v.rssi,v.mac))
+        pl(startL-1+(k*2),string.format("#%1d %-17s %4d dBm MAC %s",k,v.ip,v.rssi,v.mac))
     end
     gfx.push()
 end

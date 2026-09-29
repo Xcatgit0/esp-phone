@@ -40,6 +40,15 @@ function cursor.pos() end
 ---Check whether the joystick/select button (GPIO46) is currently pressed.
 ---@return integer level 0 = pressed (pulled low), 1 = released
 function cursor.isDown() end
+---Get raw joystick data
+---@param index integer
+---@return integer x 
+---@return integer y
+---@return integer pressed 0 pressed 1 released
+function cursor.raw(index) end
+---Cursor Visibility
+---@param bool boolean
+function cursor.visible(bool) end
 
 ---@class Button
 button = {}
