@@ -8,3 +8,4 @@ lib
 phone.zip
 dependencies.lock
 data/password.lua
+emu/CMakeFiles

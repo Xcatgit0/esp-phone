@@ -32,6 +32,10 @@ function readfile(path) end
 ---@class CursorAPI
 cursor = {}
 
+---Set Cursor Position
+---@param x integer
+---@param y integer
+function cursor.set(x,y) end
 ---Get the current cursor position.
 ---@return integer x
 ---@return integer y
@@ -46,6 +50,14 @@ function cursor.isDown() end
 ---@return integer y
 ---@return integer pressed 0 pressed 1 released
 function cursor.raw(index) end
+---Block until a button changes state (interrupt driven, no busy loop).
+---Only changes that happen AFTER the call are reported; a button already held is the baseline.
+---Button ids: 0 = primary joystick button, 1 = secondary joystick button, 2 = KEY1, 3 = KEY2, 4 = KEY3.
+---@param ids? integer|integer[] One id, a list of ids, or nil for all five buttons.
+---@param timeout_ms? integer Give up after this many ms. nil or negative = wait forever.
+---@return integer|nil id Button that changed, or nil on timeout.
+---@return boolean? pressed true = now pressed, false = now released.
+function cursor.poll(ids, timeout_ms) end
 ---Cursor Visibility
 ---@param bool boolean
 function cursor.visible(bool) end

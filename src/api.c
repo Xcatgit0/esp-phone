@@ -14,6 +14,7 @@
 #include "wrap.h"
 #include "lua_wifi.h"
 #include "hr2046.h"
+#include "cursor_poll.h"
 static gfx_font_t *lua_loaded_font = NULL;
 
 static int api_gfx_line(lua_State *L)
@@ -278,6 +279,13 @@ static int api_touch_raw(lua_State *L)
 
     return 4;
 }
+int api_cursor_set(lua_State *L) {
+    int x = luaL_checkinteger(L,1);
+    int y = luaL_checkinteger(L,2);
+    cursor_x = x;
+    cursor_y = y;
+    return 0;
+}
 void API_INIT(lua_State *L) {
     EEC(hr2046_init());
     lua_newtable(L);
@@ -302,6 +310,7 @@ void API_INIT(lua_State *L) {
     wrap_add_function(L,"touch",api_touch_raw);
     wrap_add_function(L,"raw",api_rawjoy);
     wrap_add_function(L,"visible",api_cursorvisible);
+    wrap_add_function(L,"set",api_cursor_set);
     lua_setglobal(L,"cursor");
 
     lua_newtable(L);    
@@ -328,5 +337,6 @@ void API_INIT(lua_State *L) {
     lua_pushcfunction(L, api_rgb_convert);  lua_setfield(L, -2, "rgb");
     lua_setglobal(L, "gfx");
     lua_wifi_register(L);
+    cursor_poll_register(L);   // adds cursor.poll (src/cursor_poll.c)
     LOG_INFO("LOADED");
 }
