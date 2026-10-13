@@ -3,7 +3,8 @@
 #include <cstdlib>
 #include <cstring>
 #include <string>
-
+#include <unistd.h>
+#include <csignal>
 #ifndef EMU_DEFAULT_ROOT
 #define EMU_DEFAULT_ROOT ".."
 #endif
@@ -24,13 +25,20 @@ static void usage() {
 "  --psram-kb N        PSRAM part of it (default 8192)\n"
 "  --heap-limit-kb N   hard limit: Lua/C allocations beyond it fail (simulate OOM)\n"
 "  --dump-api          print every global the Lua VM exposes, then exit\n"
+"  --audio SINK        audio output: pulse (default, mono) | null | wav:FILE | wav-stereo:FILE\n"
 "  --set KEY=VALUE     hardware tuning: touch-noise, adc-noise, adc-center,\n"
 "                      j1-invert-x, j1-invert-y, j2-invert-x, j2-invert-y\n"
 "\n"
 "keys: arrows=joy1 WASD=joy2 space/enter=stick buttons 1 2 3=KEY1..3 F5=reset F12=shot Esc=quit");
 }
-
+int rc;
+void handl(int sig) {
+        fflush(stdout); fflush(stderr);
+    _Exit(rc);   // device tasks (e.g. the wifi.http worker) are detached threads that never return
+    exit(0);
+}
 int main(int argc, char **argv) {
+    signal(SIGINT,handl);
     emu::Options o;
     o.root = EMU_DEFAULT_ROOT;
     auto need = [&](int &i) -> const char * {
@@ -52,6 +60,7 @@ int main(int argc, char **argv) {
         else if (a == "--psram-kb") o.psramKb = (size_t)atol(need(i));
         else if (a == "--heap-limit-kb") o.heapLimitKb = (size_t)atol(need(i));
         else if (a == "--dump-api") o.dumpApi = true;
+        else if (a == "--audio") o.audio = need(i);
         else if (a == "--set") {
             std::string kv = need(i); auto p = kv.find('=');
             if (p == std::string::npos) { fprintf(stderr, "--set expects KEY=VALUE\n"); return 2; }
@@ -68,5 +77,7 @@ int main(int argc, char **argv) {
         } else { fprintf(stderr, "unknown option %s (try --help)\n", a.c_str()); return 2; }
     }
     if (o.fsDir.empty()) o.fsDir = o.root + "/data";
-    return emu::run(o);
+    rc = emu::run(o);
+    fflush(stdout); fflush(stderr);
+    _Exit(rc);   // device tasks (e.g. the wifi.http worker) are detached threads that never return
 }

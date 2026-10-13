@@ -37,7 +37,7 @@ struct Config {
     // device code: primary x > 2800 => cursor_x--, y > 2800 => cursor_y++
     bool  j1InvertX    = true;   // stick right => ADC low => cursor right
     bool  j1InvertY    = false;
-    bool  j2InvertX    = false;
+    bool  j2InvertX    = true;
     bool  j2InvertY    = false;
 };
 Config &config();
@@ -107,6 +107,9 @@ bool quitRequested();
 std::string fsPath(const std::string &devicePath);      // "/fs/x.lua" -> host path
 void log(const char *fmt, ...) __attribute__((format(printf, 1, 2)));
 
+/* Audio output sink for the I2S backend: "pulse" (default, mono), "null", "wav:FILE", "wav-stereo:FILE". */
+void setAudioSink(const std::string &spec);
+
 struct Options {
     std::string root;            // phone project root (default: parent of emu/)
     std::string fsDir;           // what "/fs" maps to (default: <root>/data)
@@ -120,6 +123,7 @@ struct Options {
     size_t heapLimitKb = 0;      // 0 = no hard limit; else Lua/C allocations beyond this fail (OOM)
     double runSeconds = 0;       // headless: stop after N seconds (0 = until script/VM ends)
     bool   dumpApi    = false;   // print every global exposed to Lua and exit
+    std::string audio = "pulse"; // see setAudioSink()
 };
 int run(const Options &opt);     // used by main(); blocks until quit
 

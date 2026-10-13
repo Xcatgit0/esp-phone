@@ -160,4 +160,9 @@ function Touch.read(count)
 end
 
 Touch.recalibrate()
+Touch.x = 0
+Touch.y = 0
+Touch.touching = false
+Touch.down = false
+Touch.holding = false
 return Touch

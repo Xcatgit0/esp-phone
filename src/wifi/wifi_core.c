@@ -326,6 +326,7 @@ esp_err_t wifi_core_start(void)
 
     if ((mode == WIFI_CORE_MODE_STA || mode == WIFI_CORE_MODE_APSTA) && s_sta_netif == NULL) {
         s_sta_netif = esp_netif_create_default_wifi_sta();
+        esp_netif_set_hostname(s_sta_netif,"ESP-PHONE");
     }
     if ((mode == WIFI_CORE_MODE_AP || mode == WIFI_CORE_MODE_APSTA) && s_ap_netif == NULL) {
         s_ap_netif = esp_netif_create_default_wifi_ap();

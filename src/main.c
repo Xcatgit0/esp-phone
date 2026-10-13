@@ -52,6 +52,23 @@ static void lua_task(void *arg)
 
         while (1) vTaskDelay(1000);
 }
+static void *lua_psram_alloc(
+    void *ud,
+    void *ptr,
+    size_t osize,
+    size_t nsize
+) {
+    (void)ud;
+    (void)osize;
+    if (nsize==0) {
+        heap_caps_free(ptr);
+        return NULL;
+    }
+    if (ptr==NULL) {
+        return heap_caps_malloc(nsize,MALLOC_CAP_SPIRAM|MALLOC_CAP_8BIT);
+    }
+    return heap_caps_realloc(ptr,nsize,MALLOC_CAP_SPIRAM|MALLOC_CAP_8BIT);
+}
 void app_main(void)
 {
     esp_vfs_spiffs_conf_t conf = {
@@ -76,7 +93,7 @@ void app_main(void)
     LOG_INFO("DONE");
     LOG_INFO("Loading Lua");
     printf("ram %u\n",heap_caps_get_free_size(MALLOC_CAP_INTERNAL));
-    L = luaL_newstate();
+    L = lua_newstate(lua_psram_alloc,NULL,luaL_makeseed(NULL));
     //lua_sethook(L, lua_debug_hook, LUA_MASKCOUNT, 10);
     LOG_INFO("Lua loaded");
     LOG_INFO("Loading API..");
@@ -93,7 +110,7 @@ void app_main(void)
     xTaskCreatePinnedToCore(
         lua_task,
         "lua",
-        8192,
+        16384,
         L,
         5,
         NULL,
@@ -120,6 +137,10 @@ void initAPI(lua_State *L)
 
     luaL_requiref(L, LUA_MATHLIBNAME, luaopen_math, 1);
     lua_pop(L, 1);
+
+    luaL_requiref(L,LUA_COLIBNAME,luaopen_coroutine,1);
+    lua_pop(L,1);
+
     LOG_INFO("Loading api");
     API_INIT(L);
 }

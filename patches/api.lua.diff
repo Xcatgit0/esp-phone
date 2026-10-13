@@ -1,0 +1,77 @@
+--- a/api.lua	2026-10-04 03:57:04.433618152 +0000
++++ b/api.lua	2026-10-04 03:57:22.456610846 +0000
+@@ -522,4 +522,72 @@
+ function wifi.signal.quality() end
+ 
+ ---@return WifiSignalInfo info
+-function wifi.signal.info() end
+\ No newline at end of file
++function wifi.signal.info() end
++
++---------------------------------------------------------------------
++-- wifi.http  (src/wifi/lua_http.c)
++---------------------------------------------------------------------
++
++---@class WifiHttpOptions
++---@field url string             http:// or https:// (percent-encode spaces etc.)
++---@field method? string         "GET" (default) "POST" "PUT" "PATCH" "DELETE" "HEAD"
++---@field headers? table<string, string|number>  Host/Content-Length/Connection are set automatically. Default User-Agent "ESP32-Phone/1.0".
++---@field body? string           Not allowed for GET/HEAD. Max 64 KiB.
++---@field timeout? integer       ms, total budget incl. redirects. Default 15000 (100..120000).
++---@field max_body? integer      bytes. Default 65536, hard cap 1 MiB. Larger responses fail with an error.
++---@field redirects? integer     Max redirects to follow. Default 5, 0 = return the 3xx. https -> http is refused.
++---@field ca_cert? string        PEM of a private CA / self-signed server cert (replaces the built-in certificate bundle).
++
++---@class WifiHttpResponse
++---@field status integer         Any HTTP status, including 404/500.
++---@field ok boolean             status is 200..299
++---@field headers table<string, string>  lowercase names; repeated headers joined with ", "
++---@field body string            binary safe
++---@field url string             final URL after redirects
++---@field redirects integer
++
++---@class WifiHttpAPI
++wifi.http = {}
++
++---Blocking request. nil, err only for transport problems (no network, DNS,
++---connect, TLS, timeout, body > max_body, bad options). HTTP errors such as
++---404 are normal results (ok = false). Needs STA connected with an IP.
++---@param options WifiHttpOptions
++---@return WifiHttpResponse|nil response
++---@return string? err
++function wifi.http.request(options) end
++
++---@param url string
++---@param options? WifiHttpOptions  (url inside is ignored)
++---@return WifiHttpResponse|nil response
++---@return string? err
++function wifi.http.get(url, options) end
++
++---@param url string
++---@param body string
++---@param options? WifiHttpOptions
++---@return WifiHttpResponse|nil response
++---@return string? err
++function wifi.http.post(url, body, options) end
++
++---Start a request in the background (worker task on core 0) and return at once.
++---At most 4 outstanding requests; they run one at a time.
++---@param options WifiHttpOptions
++---@return integer|nil id
++---@return string? err
++function wifi.http.start(options) end
++
++---Collect a request started with wifi.http.start(). Returns false while it is
++---still running. timeout_ms: nil/0 = check once, > 0 = sleep up to that long
++---(no busy loop), < 0 = wait forever. The result is returned once; after that
++---the id is invalid (using it raises an error).
++---@param id integer
++---@param timeout_ms? number
++---@return WifiHttpResponse|false|nil response
++---@return string? err
++function wifi.http.poll(id, timeout_ms) end
++
++---Abort a request and free its slot (queued, running or finished).
++---@param id integer
++---@return boolean existed
++function wifi.http.cancel(id) end

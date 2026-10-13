@@ -50,14 +50,23 @@ function cursor.isDown() end
 ---@return integer y
 ---@return integer pressed 0 pressed 1 released
 function cursor.raw(index) end
----Block until a button changes state (interrupt driven, no busy loop).
----Only changes that happen AFTER the call are reported; a button already held is the baseline.
+---Wait for a button change (interrupt driven, no busy loop).
+---Every change is recorded in the background from boot (debounced, buffer of 16; when full the
+---oldest is dropped), whether or not Lua is polling. poll returns the OLDEST buffered change of the
+---requested buttons at once, or sleeps until one arrives. Changes of other buttons stay buffered.
 ---Button ids: 0 = primary joystick button, 1 = secondary joystick button, 2 = KEY1, 3 = KEY2, 4 = KEY3.
+---Only one task may poll at a time. Use cursor.poll_flush() when old presses must not count.
 ---@param ids? integer|integer[] One id, a list of ids, or nil for all five buttons.
----@param timeout_ms? integer Give up after this many ms. nil or negative = wait forever.
+---@param timeout_ms? number nil or negative = wait forever, 0 = only return an already buffered change, > 0 = give up after that many ms.
 ---@return integer|nil id Button that changed, or nil on timeout.
----@return boolean? pressed true = now pressed, false = now released.
+---@return boolean? pressed true = pressed, false = released.
+---@return integer? age_ms How long ago the change happened (how stale it is).
 function cursor.poll(ids, timeout_ms) end
+
+---Discard buffered button changes recorded for cursor.poll.
+---Call it when a screen or mode starts and presses made earlier must be ignored.
+---@param ids? integer|integer[] One id, a list of ids, or nil for all five buttons (ids as in cursor.poll).
+function cursor.poll_flush(ids) end
 ---Cursor Visibility
 ---@param bool boolean
 function cursor.visible(bool) end
@@ -499,7 +508,7 @@ function wifi.net.request(options) end
 ---through the STA link, like a Wi-Fi repeater/router. Requires mode
 ---"apsta" with STA already connected and holding an IP -- call this
 ---after that, not right after wifi.start(). Requires
----CONFIG_LWIP_IP_FORWARD + CONFIG_LWIP_IPV4_NAPT in sdkconfig.
+---CONFIG_LWIP_IP_FORWARD  CONFIG_LWIP_IPV4_NAPT in sdkconfig.
 ---@param enable? boolean Defaults to true.
 ---@return boolean ok
 ---@return string? err esp_err name if ok is false.
@@ -523,3 +532,167 @@ function wifi.signal.quality() end
 
 ---@return WifiSignalInfo info
 function wifi.signal.info() end
+---------------------------------------------------------------------
+-- wifi.http  (src/wifi/lua_http.c)
+---------------------------------------------------------------------
+
+---@class WifiHttpOptions
+---@field url string             http:// or https:// (percent-encode spaces etc.)
+---@field method? string         "GET" (default) "POST" "PUT" "PATCH" "DELETE" "HEAD"
+---@field headers? table<string, string|number>  Host/Content-Length/Connection are set automatically. Default User-Agent "ESP32-Phone/1.0".
+---@field body? string           Not allowed for GET/HEAD. Max 64 KiB.
+---@field timeout? integer       ms, total budget incl. redirects. Default 15000 (100..120000).
+---@field max_body? integer      bytes. Default 65536, hard cap 1 MiB. Larger responses fail with an error.
+---@field redirects? integer     Max redirects to follow. Default 5, 0 = return the 3xx. https -> http is refused.
+---@field ca_cert? string        PEM of a private CA / self-signed server cert (replaces the built-in certificate bundle).
+
+---@class WifiHttpResponse
+---@field status integer         Any HTTP status, including 404/500.
+---@field ok boolean             status is 200..299
+---@field headers table<string, string>  lowercase names; repeated headers joined with ", "
+---@field body string            binary safe
+---@field url string             final URL after redirects
+---@field redirects integer
+
+---@class WifiHttpAPI
+wifi.http = {}
+
+---Blocking request. nil, err only for transport problems (no network, DNS,
+---connect, TLS, timeout, body > max_body, bad options). HTTP errors such as
+---404 are normal results (ok = false). Needs STA connected with an IP.
+---@param options WifiHttpOptions
+---@return WifiHttpResponse|nil response
+---@return string? err
+function wifi.http.request(options) end
+
+---@param url string
+---@param options? WifiHttpOptions  (url inside is ignored)
+---@return WifiHttpResponse|nil response
+---@return string? err
+function wifi.http.get(url, options) end
+
+---@param url string
+---@param body string
+---@param options? WifiHttpOptions
+---@return WifiHttpResponse|nil response
+---@return string? err
+function wifi.http.post(url, body, options) end
+
+---Start a request in the background (worker task on core 0) and return at once.
+---At most 4 outstanding requests; they run one at a time.
+---@param options WifiHttpOptions
+---@return integer|nil id
+---@return string? err
+function wifi.http.start(options) end
+
+---Collect a request started with wifi.http.start(). Returns false while it is
+---still running. timeout_ms: nil/0 = check once, > 0 = sleep up to that long
+---(no busy loop), < 0 = wait forever. The result is returned once; after that
+---the id is invalid (using it raises an error).
+---@param id integer
+---@param timeout_ms? number
+---@return WifiHttpResponse|false|nil response
+---@return string? err
+function wifi.http.poll(id, timeout_ms) end
+
+---Abort a request and free its slot (queued, running or finished).
+---@param id integer
+---@return boolean existed
+function wifi.http.cancel(id) end
+
+ function wifi.http.cancel(id) end
+
+---------------------------------------------------------------------
+-- audio  (src/audio/lua_audio.c)
+---------------------------------------------------------------------
+
+---@class AudioPlayOptions
+---@field loop? boolean          Files only: restart at the end.
+---@field timeout? integer       Network: connect / per-read timeout in ms. Default 15000.
+---@field prebuffer? integer     Network: bytes to buffer before playing. Default 32768.
+---@field headers? table<string, string>  Network: extra request headers (max 8).
+---@field ca_cert? string        Network: PEM of a private CA / self-signed server.
+
+---@class AudioEqBand
+---@field type? "peak"|"lowshelf"|"highshelf"|"lowpass"|"highpass"|"notch"  Default "peak".
+---@field freq number            20 .. 45% of the output rate, Hz.
+---@field gain? number           dB, -24..24 (ignored by lowpass/highpass/notch). Default 0.
+---@field q? number              0.1..20. Default 1 (peak/notch) or 0.707.
+
+---@class AudioStatus
+---@field state "stopped"|"buffering"|"playing"|"paused"|"error"
+---@field uri string
+---@field codec? string          "wav", "mp3", ...
+---@field position integer       ms of audio handed to the output
+---@field duration? integer      ms, only when the format tells (WAV)
+---@field sample_rate? integer   source rate
+---@field channels? integer
+---@field out_rate integer       output (I2S) rate everything is resampled to
+---@field volume number
+---@field mono boolean
+---@field buffered integer       network ring buffer fill, bytes
+---@field error? string
+
+---@class AudioAPI
+audio = {}
+
+---Play a file ("/fs/test.mp3") or a network stream ("http(s)://..."). Replaces the current track.
+---Returns at once; errors found later arrive through audio.wait() / audio.status().error.
+---@param source string
+---@param options? AudioPlayOptions
+---@return boolean|nil ok
+---@return string? err
+function audio.play(source, options) end
+
+function audio.stop() end
+function audio.pause() end
+function audio.resume() end
+
+---Get / set the volume (linear amplitude 0..1).
+---@param v? number
+---@return number|nil volume
+---@return string? err
+function audio.volume(v) end
+
+---true (default): (LR)/2 on both channels. false: real stereo.
+---@param on? boolean
+---@return boolean
+function audio.mono(on) end
+
+---Output sample rate 8000..48000 (default 44100); can only be set while stopped.
+---@param hz? integer
+---@return integer|nil rate
+---@return string? err
+function audio.rate(hz) end
+
+---Set all EQ bands (max 5). Returns true or nil, err. Without an argument: read the active bands.
+---@param bands? AudioEqBand[]
+---@return boolean|AudioEqBand[]|nil
+---@return string? err
+function audio.eq(bands) end
+
+---Set one band (1..5): audio.eq_band(i, freq, gain_db [, q [, type]]); audio.eq_band(i, nil) disables it.
+---@param index integer
+---@param freq? number
+---@param gain? number
+---@param q? number
+---@param type? string
+---@return boolean|nil
+---@return string? err
+function audio.eq_band(index, freq, gain, q, type) end
+
+function audio.eq_reset() end
+
+---@return AudioStatus
+function audio.status() end
+
+---Sleep until the track ends (no busy loop). timeout_ms: nil = forever. Returns nil on timeout.
+---If nothing is playing, returns the last end reason at once.
+---@param timeout_ms? number
+---@return "finished"|"stopped"|"error"|nil reason
+---@return string? err
+function audio.wait(timeout_ms) end
+
+---Names of the codecs this build can decode.
+---@return string[]
+function audio.codecs() end

@@ -100,6 +100,48 @@ To act on the hardware while Lua is blocked in `cursor.poll`, use `emu.schedule(
 (also `"stick_button"`, `"stick"`, `"touch"`, `"gpio"`), or `emu::schedule()` from C++. `emu.cpu_ms()` returns
 process CPU time, used by `tests/poll.lua` to prove the wait is not a busy loop.
 
+## wifi.http (device API, also runs in the emulator)
+
+```lua
+local res, err = wifi.http.get("https://raw.githubusercontent.com/user/repo/main/data.lua")
+local res, err = wifi.http.post(url, body, { headers = { ["Content-Type"] = "application/json" } })
+local res, err = wifi.http.request{ url=..., method="PUT", headers={...}, body="...", timeout=8000,
+                                    max_body=65536, redirects=5, ca_cert=PEM }
+-- res = { status=200, ok=true, headers={["content-type"]=...}, body="...", url="final url", redirects=0 }
+-- nil, err only for transport problems; 404/500 are normal results (res.ok == false)
+
+local id = wifi.http.start{ url=... }          -- non-blocking, runs on core 0
+local res, err = wifi.http.poll(id)            -- false while running
+local res, err = wifi.http.poll(id, 200)       -- sleep up to 200 ms (no busy loop)
+wifi.http.cancel(id)
+```
+
+Needs STA connected with an IP. HTTPS uses the ESP-IDF certificate bundle on the device (use `ca_cert` for a
+private/self-signed game server). One worker task runs requests one at a time (max 4 outstanding), so only one TLS
+session is in RAM at once. Redirects are followed by hand (https -> http is refused); responses larger than
+`max_body` fail instead of filling the heap. Header values containing CR/LF are rejected.
+
+The same `src/wifi/lua_http.c` is compiled into the emulator on top of `emu/src/emu_http_client.cpp` (libcurl:
+`sudo apt install libcurl4-openssl-dev`, then re-run cmake). The mock STA still has to be "connected" first, as on the device.
+Differences: the whole exchange happens inside `open()`/`fetch_headers()` (so cancel and `max_body` take effect after the
+transfer), TLS trusts the host's CA store instead of the device's bundle, and there are no RAM limits.
+`tests/http.lua` runs against a local server (`tests/http_server.py`); `tests/http_github.lua` is a live HTTPS demo.
+
+## audio (device API, also runs in the emulator) — full guide in Thai: docs/AUDIO_TH.md
+
+```lua
+audio.play("/fs/test.mp3")  audio.volume(0.6)  audio.eq({ {type="notch", freq=1000} })
+audio.play("https://host/stream.mp3", { prebuffer = 32768 })    -- network source (STA must have an IP)
+print(audio.wait())   -- "finished" | "stopped" | "error", msg      audio.status()  audio.pause()  audio.stop()
+```
+
+Everything (Lua API, player, resampler, EQ, volume, file/HTTP sources, WAV + MP3 decoders) is the same C code on both
+sides. Only the **I2S backend** differs: device `src/audio/out_i2s_esp.c` (MAX98357: DOUT 4, BCLK 5, LRC 6) vs.
+emulator `emu/src/emu_audio_out.cpp`. Pick the emulator's sink with `--audio pulse|null|wav:FILE|wav-stereo:FILE`
+(PulseAudio gets MONO, the device sends STEREO). Optional decoder on the device: esp_audio_codec (`-DAUDIO_USE_ESP_CODEC`).
+`tests/audio_test.py` plays generated tones and checks the recorded output with numpy (levels in dB, durations, tones).
+The network source streams through the emulator's libcurl-based `esp_http_client` (also used by wifi.http).
+
 ## Adding your own APIs
 
 **A. Lua API implemented on the host** — create `emu/modules/mything.cpp` (re-run cmake once):

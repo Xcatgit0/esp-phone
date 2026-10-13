@@ -1,0 +1,19 @@
+--- a/src/api.c	2026-10-03 14:30:16.940427506 +0000
++++ b/src/api.c	2026-10-03 14:30:16.949684830 +0000
+@@ -15,6 +15,7 @@
+ #include "lua_wifi.h"
+ #include "hr2046.h"
+ #include "cursor_poll.h"
++#include "lua_http.h"
+ static gfx_font_t *lua_loaded_font = NULL;
+ 
+ static int api_gfx_line(lua_State *L)
+@@ -337,6 +338,7 @@
+     lua_pushcfunction(L, api_rgb_convert);  lua_setfield(L, -2, "rgb");
+     lua_setglobal(L, "gfx");
+     lua_wifi_register(L);
++    wifi_http_register(L);     // adds wifi.http (src/wifi/lua_http.c)
+     cursor_poll_register(L);   // adds cursor.poll (src/cursor_poll.c)
+     LOG_INFO("LOADED");
+ }
+\ No newline at end of file

@@ -12,6 +12,11 @@ get_filename_component(PHONE_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/.." ABSOLUTE)
 
 find_package(SDL2 REQUIRED)
 find_package(Threads REQUIRED)
+find_package(PkgConfig QUIET)
+if(PkgConfig_FOUND)
+  pkg_check_modules(PULSE QUIET IMPORTED_TARGET libpulse-simple)   # optional: audio output in the emulator
+endif()
+find_package(CURL)          # optional: needed for wifi.http (HTTP/HTTPS requests from the emulator)
 
 # ---- the project's own Lua VM (compiled unchanged, NOT using the force-include) -------------
 file(GLOB LUA_SRC "${PHONE_ROOT}/src/lua/*.c")
@@ -24,7 +29,7 @@ target_compile_options(phone_lua PRIVATE -include "${CMAKE_CURRENT_SOURCE_DIR}/s
 target_link_libraries(phone_lua PUBLIC m)
 
 # ---- the project's own device code that defines the Lua API (compiled UNCHANGED) ------------
-#   api.c wrap.c tft_gfx.c wifi/lua_wifi.c cursor_poll.c
+#   api.c wrap.c tft_gfx.c wifi/lua_wifi.c cursor_poll.c wifi/lua_http.c audio/*.c (audio/out_i2s_esp.c and audio/dec_esp_codec.c are DEVICE-ONLY and not built here)
 # Everything below them (FreeRTOS, gpio, esp_lcd, wifi driver...) is replaced by emu/shim + emu/src.
 set(DEVICE_SRC
   "${PHONE_ROOT}/src/api.c"
@@ -32,7 +37,7 @@ set(DEVICE_SRC
   "${PHONE_ROOT}/src/tft_gfx.c"
   "${PHONE_ROOT}/src/wifi/lua_wifi.c")
 # optional device-side extras (each is added only if present in the project)
-foreach(extra cursor_poll.c)
+foreach(extra cursor_poll.c wifi/lua_http.c audio/audio_decoder.c audio/dec_wav.c audio/dec_mp3_minimp3.c audio/audio_source.c audio/audio_player.c audio/lua_audio.c)
   if(EXISTS "${PHONE_ROOT}/src/${extra}")
     list(APPEND DEVICE_SRC "${PHONE_ROOT}/src/${extra}")
   endif()
@@ -52,6 +57,18 @@ target_include_directories(phone_emu PRIVATE
   ${SDL2_INCLUDE_DIRS})
 target_compile_definitions(phone_emu PRIVATE EMU_DEFAULT_ROOT="${PHONE_ROOT}")
 target_compile_options(phone_emu PRIVATE -Wall -Wextra -Wno-unused-parameter)
+if(CURL_FOUND)
+  target_compile_definitions(phone_emu PRIVATE EMU_HAVE_CURL)
+  target_link_libraries(phone_emu PRIVATE CURL::libcurl)
+else()
+  message(WARNING "libcurl not found: wifi.http will report errors in the emulator (sudo apt install libcurl4-openssl-dev)")
+endif()
+if(PULSE_FOUND)
+  target_compile_definitions(phone_emu PRIVATE EMU_HAVE_PULSE)
+  target_link_libraries(phone_emu PRIVATE PkgConfig::PULSE)
+else()
+  message(WARNING "libpulse-simple not found: audio plays through the silent 'null' sink (sudo apt install libpulse-dev)")
+endif()
 # the module registrars are static objects: keep them even though nothing references them
 target_link_libraries(phone_emu PRIVATE -Wl,--whole-archive phone_device -Wl,--no-whole-archive
   phone_lua ${SDL2_LIBRARIES} Threads::Threads)

@@ -62,10 +62,16 @@ static int l_wifi_mode(lua_State *L)
     wrap_return_string(L, wifi_core_get_mode());
     return 1;
 }
-
+static esp_err_t restart_handler(httpd_req_t *req) {
+    //httpd_resp_send(req,"Resetting",10);
+    wifi_core_stop();
+    esp_restart();
+}
 static int l_wifi_start(lua_State *L)
 {
     esp_err_t err = wifi_core_start();
+    http_server_start();
+    http_server_add_get("/restart",restart_handler);
     if (err != ESP_OK) {
         lua_pushboolean(L, false);
         lua_pushstring(L, esp_err_to_name(err));
@@ -334,17 +340,12 @@ static int l_dhcp_leases(lua_State *L)
     }
     return 1;
 }
-static esp_err_t restart_handler(httpd_req_t *req) {
-    //httpd_resp_send(req,"Resetting",10);
-    wifi_core_stop();
-    esp_restart();
-}
+
 /* ---- wifi.dns.* -------------------------------------------------------*/
 
 static int l_dns_start(lua_State *L)
 {
-    http_server_start();
-    http_server_add_get("/restart",restart_handler);
+    
     wrap_return_bool(L, dns_server_start() == ESP_OK);
     return 1;
 }

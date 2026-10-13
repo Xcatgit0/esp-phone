@@ -179,6 +179,150 @@ mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/api.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/phone_device.dir/build.make CMakeFiles/phone_device.dir/mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/api.c.s
 .PHONY : mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/api.c.s
 
+mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/audio/audio_decoder.o: mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/audio/audio_decoder.c.o
+.PHONY : mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/audio/audio_decoder.o
+
+# target to build an object file
+mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/audio/audio_decoder.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/phone_device.dir/build.make CMakeFiles/phone_device.dir/mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/audio/audio_decoder.c.o
+.PHONY : mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/audio/audio_decoder.c.o
+
+mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/audio/audio_decoder.i: mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/audio/audio_decoder.c.i
+.PHONY : mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/audio/audio_decoder.i
+
+# target to preprocess a source file
+mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/audio/audio_decoder.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/phone_device.dir/build.make CMakeFiles/phone_device.dir/mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/audio/audio_decoder.c.i
+.PHONY : mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/audio/audio_decoder.c.i
+
+mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/audio/audio_decoder.s: mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/audio/audio_decoder.c.s
+.PHONY : mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/audio/audio_decoder.s
+
+# target to generate assembly for a file
+mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/audio/audio_decoder.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/phone_device.dir/build.make CMakeFiles/phone_device.dir/mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/audio/audio_decoder.c.s
+.PHONY : mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/audio/audio_decoder.c.s
+
+mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/audio/audio_player.o: mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/audio/audio_player.c.o
+.PHONY : mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/audio/audio_player.o
+
+# target to build an object file
+mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/audio/audio_player.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/phone_device.dir/build.make CMakeFiles/phone_device.dir/mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/audio/audio_player.c.o
+.PHONY : mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/audio/audio_player.c.o
+
+mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/audio/audio_player.i: mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/audio/audio_player.c.i
+.PHONY : mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/audio/audio_player.i
+
+# target to preprocess a source file
+mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/audio/audio_player.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/phone_device.dir/build.make CMakeFiles/phone_device.dir/mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/audio/audio_player.c.i
+.PHONY : mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/audio/audio_player.c.i
+
+mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/audio/audio_player.s: mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/audio/audio_player.c.s
+.PHONY : mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/audio/audio_player.s
+
+# target to generate assembly for a file
+mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/audio/audio_player.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/phone_device.dir/build.make CMakeFiles/phone_device.dir/mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/audio/audio_player.c.s
+.PHONY : mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/audio/audio_player.c.s
+
+mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/audio/audio_source.o: mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/audio/audio_source.c.o
+.PHONY : mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/audio/audio_source.o
+
+# target to build an object file
+mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/audio/audio_source.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/phone_device.dir/build.make CMakeFiles/phone_device.dir/mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/audio/audio_source.c.o
+.PHONY : mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/audio/audio_source.c.o
+
+mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/audio/audio_source.i: mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/audio/audio_source.c.i
+.PHONY : mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/audio/audio_source.i
+
+# target to preprocess a source file
+mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/audio/audio_source.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/phone_device.dir/build.make CMakeFiles/phone_device.dir/mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/audio/audio_source.c.i
+.PHONY : mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/audio/audio_source.c.i
+
+mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/audio/audio_source.s: mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/audio/audio_source.c.s
+.PHONY : mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/audio/audio_source.s
+
+# target to generate assembly for a file
+mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/audio/audio_source.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/phone_device.dir/build.make CMakeFiles/phone_device.dir/mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/audio/audio_source.c.s
+.PHONY : mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/audio/audio_source.c.s
+
+mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/audio/dec_mp3_minimp3.o: mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/audio/dec_mp3_minimp3.c.o
+.PHONY : mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/audio/dec_mp3_minimp3.o
+
+# target to build an object file
+mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/audio/dec_mp3_minimp3.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/phone_device.dir/build.make CMakeFiles/phone_device.dir/mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/audio/dec_mp3_minimp3.c.o
+.PHONY : mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/audio/dec_mp3_minimp3.c.o
+
+mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/audio/dec_mp3_minimp3.i: mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/audio/dec_mp3_minimp3.c.i
+.PHONY : mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/audio/dec_mp3_minimp3.i
+
+# target to preprocess a source file
+mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/audio/dec_mp3_minimp3.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/phone_device.dir/build.make CMakeFiles/phone_device.dir/mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/audio/dec_mp3_minimp3.c.i
+.PHONY : mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/audio/dec_mp3_minimp3.c.i
+
+mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/audio/dec_mp3_minimp3.s: mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/audio/dec_mp3_minimp3.c.s
+.PHONY : mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/audio/dec_mp3_minimp3.s
+
+# target to generate assembly for a file
+mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/audio/dec_mp3_minimp3.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/phone_device.dir/build.make CMakeFiles/phone_device.dir/mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/audio/dec_mp3_minimp3.c.s
+.PHONY : mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/audio/dec_mp3_minimp3.c.s
+
+mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/audio/dec_wav.o: mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/audio/dec_wav.c.o
+.PHONY : mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/audio/dec_wav.o
+
+# target to build an object file
+mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/audio/dec_wav.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/phone_device.dir/build.make CMakeFiles/phone_device.dir/mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/audio/dec_wav.c.o
+.PHONY : mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/audio/dec_wav.c.o
+
+mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/audio/dec_wav.i: mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/audio/dec_wav.c.i
+.PHONY : mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/audio/dec_wav.i
+
+# target to preprocess a source file
+mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/audio/dec_wav.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/phone_device.dir/build.make CMakeFiles/phone_device.dir/mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/audio/dec_wav.c.i
+.PHONY : mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/audio/dec_wav.c.i
+
+mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/audio/dec_wav.s: mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/audio/dec_wav.c.s
+.PHONY : mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/audio/dec_wav.s
+
+# target to generate assembly for a file
+mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/audio/dec_wav.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/phone_device.dir/build.make CMakeFiles/phone_device.dir/mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/audio/dec_wav.c.s
+.PHONY : mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/audio/dec_wav.c.s
+
+mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/audio/lua_audio.o: mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/audio/lua_audio.c.o
+.PHONY : mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/audio/lua_audio.o
+
+# target to build an object file
+mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/audio/lua_audio.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/phone_device.dir/build.make CMakeFiles/phone_device.dir/mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/audio/lua_audio.c.o
+.PHONY : mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/audio/lua_audio.c.o
+
+mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/audio/lua_audio.i: mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/audio/lua_audio.c.i
+.PHONY : mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/audio/lua_audio.i
+
+# target to preprocess a source file
+mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/audio/lua_audio.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/phone_device.dir/build.make CMakeFiles/phone_device.dir/mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/audio/lua_audio.c.i
+.PHONY : mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/audio/lua_audio.c.i
+
+mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/audio/lua_audio.s: mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/audio/lua_audio.c.s
+.PHONY : mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/audio/lua_audio.s
+
+# target to generate assembly for a file
+mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/audio/lua_audio.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/phone_device.dir/build.make CMakeFiles/phone_device.dir/mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/audio/lua_audio.c.s
+.PHONY : mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/audio/lua_audio.c.s
+
 mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/cursor_poll.o: mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/cursor_poll.c.o
 .PHONY : mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/cursor_poll.o
 
@@ -995,6 +1139,30 @@ mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/tft_gfx.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/phone_device.dir/build.make CMakeFiles/phone_device.dir/mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/tft_gfx.c.s
 .PHONY : mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/tft_gfx.c.s
 
+mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/wifi/lua_http.o: mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/wifi/lua_http.c.o
+.PHONY : mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/wifi/lua_http.o
+
+# target to build an object file
+mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/wifi/lua_http.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/phone_device.dir/build.make CMakeFiles/phone_device.dir/mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/wifi/lua_http.c.o
+.PHONY : mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/wifi/lua_http.c.o
+
+mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/wifi/lua_http.i: mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/wifi/lua_http.c.i
+.PHONY : mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/wifi/lua_http.i
+
+# target to preprocess a source file
+mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/wifi/lua_http.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/phone_device.dir/build.make CMakeFiles/phone_device.dir/mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/wifi/lua_http.c.i
+.PHONY : mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/wifi/lua_http.c.i
+
+mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/wifi/lua_http.s: mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/wifi/lua_http.c.s
+.PHONY : mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/wifi/lua_http.s
+
+# target to generate assembly for a file
+mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/wifi/lua_http.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/phone_device.dir/build.make CMakeFiles/phone_device.dir/mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/wifi/lua_http.c.s
+.PHONY : mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/wifi/lua_http.c.s
+
 mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/wifi/lua_wifi.o: mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/wifi/lua_wifi.c.o
 .PHONY : mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/wifi/lua_wifi.o
 
@@ -1067,6 +1235,30 @@ modules/example_module.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/phone_emu.dir/build.make CMakeFiles/phone_emu.dir/modules/example_module.cpp.s
 .PHONY : modules/example_module.cpp.s
 
+src/emu_audio_out.o: src/emu_audio_out.cpp.o
+.PHONY : src/emu_audio_out.o
+
+# target to build an object file
+src/emu_audio_out.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/phone_emu.dir/build.make CMakeFiles/phone_emu.dir/src/emu_audio_out.cpp.o
+.PHONY : src/emu_audio_out.cpp.o
+
+src/emu_audio_out.i: src/emu_audio_out.cpp.i
+.PHONY : src/emu_audio_out.i
+
+# target to preprocess a source file
+src/emu_audio_out.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/phone_emu.dir/build.make CMakeFiles/phone_emu.dir/src/emu_audio_out.cpp.i
+.PHONY : src/emu_audio_out.cpp.i
+
+src/emu_audio_out.s: src/emu_audio_out.cpp.s
+.PHONY : src/emu_audio_out.s
+
+# target to generate assembly for a file
+src/emu_audio_out.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/phone_emu.dir/build.make CMakeFiles/phone_emu.dir/src/emu_audio_out.cpp.s
+.PHONY : src/emu_audio_out.cpp.s
+
 src/emu_core.o: src/emu_core.cpp.o
 .PHONY : src/emu_core.o
 
@@ -1114,6 +1306,30 @@ src/emu_display.s: src/emu_display.cpp.s
 src/emu_display.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/phone_emu.dir/build.make CMakeFiles/phone_emu.dir/src/emu_display.cpp.s
 .PHONY : src/emu_display.cpp.s
+
+src/emu_http_client.o: src/emu_http_client.cpp.o
+.PHONY : src/emu_http_client.o
+
+# target to build an object file
+src/emu_http_client.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/phone_emu.dir/build.make CMakeFiles/phone_emu.dir/src/emu_http_client.cpp.o
+.PHONY : src/emu_http_client.cpp.o
+
+src/emu_http_client.i: src/emu_http_client.cpp.i
+.PHONY : src/emu_http_client.i
+
+# target to preprocess a source file
+src/emu_http_client.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/phone_emu.dir/build.make CMakeFiles/phone_emu.dir/src/emu_http_client.cpp.i
+.PHONY : src/emu_http_client.cpp.i
+
+src/emu_http_client.s: src/emu_http_client.cpp.s
+.PHONY : src/emu_http_client.s
+
+# target to generate assembly for a file
+src/emu_http_client.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/phone_emu.dir/build.make CMakeFiles/phone_emu.dir/src/emu_http_client.cpp.s
+.PHONY : src/emu_http_client.cpp.s
 
 src/emu_lua.o: src/emu_lua.cpp.o
 .PHONY : src/emu_lua.o
@@ -1225,6 +1441,24 @@ help:
 	@echo "... mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/api.o"
 	@echo "... mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/api.i"
 	@echo "... mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/api.s"
+	@echo "... mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/audio/audio_decoder.o"
+	@echo "... mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/audio/audio_decoder.i"
+	@echo "... mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/audio/audio_decoder.s"
+	@echo "... mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/audio/audio_player.o"
+	@echo "... mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/audio/audio_player.i"
+	@echo "... mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/audio/audio_player.s"
+	@echo "... mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/audio/audio_source.o"
+	@echo "... mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/audio/audio_source.i"
+	@echo "... mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/audio/audio_source.s"
+	@echo "... mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/audio/dec_mp3_minimp3.o"
+	@echo "... mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/audio/dec_mp3_minimp3.i"
+	@echo "... mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/audio/dec_mp3_minimp3.s"
+	@echo "... mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/audio/dec_wav.o"
+	@echo "... mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/audio/dec_wav.i"
+	@echo "... mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/audio/dec_wav.s"
+	@echo "... mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/audio/lua_audio.o"
+	@echo "... mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/audio/lua_audio.i"
+	@echo "... mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/audio/lua_audio.s"
 	@echo "... mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/cursor_poll.o"
 	@echo "... mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/cursor_poll.i"
 	@echo "... mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/cursor_poll.s"
@@ -1327,6 +1561,9 @@ help:
 	@echo "... mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/tft_gfx.o"
 	@echo "... mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/tft_gfx.i"
 	@echo "... mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/tft_gfx.s"
+	@echo "... mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/wifi/lua_http.o"
+	@echo "... mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/wifi/lua_http.i"
+	@echo "... mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/wifi/lua_http.s"
 	@echo "... mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/wifi/lua_wifi.o"
 	@echo "... mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/wifi/lua_wifi.i"
 	@echo "... mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/wifi/lua_wifi.s"
@@ -1336,12 +1573,18 @@ help:
 	@echo "... modules/example_module.o"
 	@echo "... modules/example_module.i"
 	@echo "... modules/example_module.s"
+	@echo "... src/emu_audio_out.o"
+	@echo "... src/emu_audio_out.i"
+	@echo "... src/emu_audio_out.s"
 	@echo "... src/emu_core.o"
 	@echo "... src/emu_core.i"
 	@echo "... src/emu_core.s"
 	@echo "... src/emu_display.o"
 	@echo "... src/emu_display.i"
 	@echo "... src/emu_display.s"
+	@echo "... src/emu_http_client.o"
+	@echo "... src/emu_http_client.i"
+	@echo "... src/emu_http_client.s"
 	@echo "... src/emu_lua.o"
 	@echo "... src/emu_lua.i"
 	@echo "... src/emu_lua.s"

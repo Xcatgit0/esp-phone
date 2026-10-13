@@ -247,6 +247,7 @@ static int runGui(const Options &opt) {
 
 int run(const Options &opt) {
     g_opt = opt;
+    setAudioSink(opt.audio);
     heapConfigure(opt.heapKb, opt.psramKb, opt.heapLimitKb);
     setvbuf(stdout, nullptr, _IOLBF, 0);
     if (opt.headless || opt.dumpApi) return runHeadless();

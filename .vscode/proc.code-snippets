@@ -1,0 +1,74 @@
+{
+	// Place your phone workspace snippets here. Each snippet is defined under a snippet name and has a scope, prefix, body and 
+	// description. Add comma separated ids of the languages where the snippet is applicable in the scope field. If scope 
+	// is left empty or omitted, the snippet gets applied to all languages. The prefix is what is 
+	// used to trigger the snippet and the body will be expanded and inserted. Possible variables are: 
+	// $1, $2 for tab stops, $0 for the final cursor position, and ${1:label}, ${2:another} for placeholders. 
+	// Placeholders with the same ids are connected.
+	// Example:
+	// "Print to console": {
+	// 	"scope": "javascript,typescript",
+	// 	"prefix": "log",
+	// 	"body": [
+	// 		"console.log('$1');",
+	// 		"$2"
+	// 	],
+	// 	"description": "Log output to console"
+	// }
+	//
+	// You can also restrict snippets to specific files using include/exclude patterns:
+	// "Test snippet": {
+	// 	"scope": "javascript,typescript",
+	// 	"prefix": "test",
+	// 	"body": "test('$1', () => {\n\t$0\n});",
+	// 	"include": ["**/*.test.ts", "*.spec.ts"],
+	// 	"exclude": ["**/temp/*.ts"],
+	// 	"description": "Insert test block"
+	// }
+	"Lua Process": {
+		"prefix": "proc:lua",
+		"body": [
+			"---@param proc Process",
+			"return function(proc)",
+			"    ${1}",
+			"end"
+		],
+		"description": "Lua multitasking process templete"
+	},
+	"Lua Process GFX": {
+    "prefix": "proc:gfx",
+    "body": [
+        "---@param proc Process",
+        "return function(proc)",
+        "    local ok, key = requestFC(proc)",
+        "    if not ok then error(\"cannot request full screen\") end",
+        "    local isOwnedKey = true",
+        "    while proc.m.receiveSignal(proc) == proc.m.SIG_NON do",
+        "        if proc.signal == proc.m.SIG_TERM or proc.signal == proc.m.SIG_KILL then",
+        "            if isOwnedKey then giveFC(key); isOwnedKey = false end",
+        "            proc.status = proc.m.PROCESS_DEAD",
+        "            coroutine.yield()",
+        "            return",
+        "        end",
+        "        local bg = not proc:canDraw()",
+        "        if bg and isOwnedKey then",
+        "            giveFC(key)",
+        "            isOwnedKey = false",
+        "        elseif not bg and not isOwnedKey then",
+        "            ok, key = requestFC(proc)",
+        "            if ok then isOwnedKey = true end",
+        "        end",
+        "        if proc:canDraw() and isOwnedKey then",
+        "            -- code",
+        "            ${1}",
+        "        else",
+        "            -- bg",
+        "            proc:delay(16.667)",
+        "        end",
+        "    end",
+        "    if isOwnedKey then giveFC(key) end",
+        "end"
+    ],
+    "description": "Lua multitasking process with full screen ownership"
+},
+}

@@ -13,8 +13,10 @@
 #include "tft_gfx.h"
 #include "wrap.h"
 #include "lua_wifi.h"
+#include "lua_audio.h"
 #include "hr2046.h"
 #include "cursor_poll.h"
+#include "lua_http.h"
 static gfx_font_t *lua_loaded_font = NULL;
 
 static int api_gfx_line(lua_State *L)
@@ -96,15 +98,15 @@ int api_time_millis(lua_State *L)
 }
 int api_memory_free(lua_State *L)
 {
-    lua_pushinteger(L, esp_get_free_heap_size());
+    lua_pushinteger(L, heap_caps_get_free_size(MALLOC_CAP_INTERNAL|MALLOC_CAP_8BIT));
 
     return 1;
 }
 
 int api_memory_used(lua_State *L)
 {
-    size_t free = esp_get_free_heap_size();
-    size_t total = heap_caps_get_total_size(MALLOC_CAP_8BIT);
+    size_t free = heap_caps_get_free_size(MALLOC_CAP_INTERNAL|MALLOC_CAP_8BIT);
+    size_t total = heap_caps_get_total_size(MALLOC_CAP_INTERNAL|MALLOC_CAP_8BIT);
 
     lua_pushinteger(L, total - free);
 
@@ -337,6 +339,8 @@ void API_INIT(lua_State *L) {
     lua_pushcfunction(L, api_rgb_convert);  lua_setfield(L, -2, "rgb");
     lua_setglobal(L, "gfx");
     lua_wifi_register(L);
+    wifi_http_register(L);
     cursor_poll_register(L);   // adds cursor.poll (src/cursor_poll.c)
+    audio_register(L);         // adds the audio API (src/audio/lua_audio.c)
     LOG_INFO("LOADED");
 }

@@ -24,6 +24,7 @@ extern "C" {
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "freertos/queue.h"
+#include "freertos/semphr.h"
 #include "hr2046.h"
 }
 
@@ -245,6 +246,23 @@ BaseType_t emu_queue_receive(QueueHandle_t h, void *item, TickType_t ticks) {
     }
 }
 
+/* mutexes + tasks (wifi.http worker) */
+struct EmuMutex { std::timed_mutex m; };
+SemaphoreHandle_t emu_mutex_create(void) { return new EmuMutex; }
+BaseType_t emu_mutex_take(SemaphoreHandle_t h, TickType_t ticks) {
+    auto *m = (EmuMutex *)h;
+    if (ticks == portMAX_DELAY) { m->m.lock(); return pdPASS; }
+    return m->m.try_lock_for(milliseconds((long)ticks * portTICK_PERIOD_MS)) ? pdPASS : pdFAIL;
+}
+BaseType_t emu_mutex_give(SemaphoreHandle_t h) { ((EmuMutex *)h)->m.unlock(); return pdPASS; }
+
+BaseType_t xTaskCreatePinnedToCore(TaskFunction_t fn, const char *, uint32_t, void *arg, UBaseType_t, TaskHandle_t *out, BaseType_t) {
+    std::thread([fn, arg] { fn(arg); }).detach();   // device tasks never return
+    if (out) *out = (TaskHandle_t)(uintptr_t)1;
+    return pdPASS;
+}
+void vTaskDelete(TaskHandle_t) {}
+
 /* ----------------------------------------------------------------- GPIO */
 static std::atomic<int> g_gpio[64];
 static struct GpioInit { GpioInit() { for (auto &g : g_gpio) g = 1; } } g_gpioInit;  // external pull-ups: released = high
@@ -373,7 +391,6 @@ bool touchDown() { std::lock_guard<std::mutex> l(g_m); return g_touch; }
 void touchPos(float &sx, float &sy) { std::lock_guard<std::mutex> l(g_m); sx = g_tx; sy = g_ty; }
 void setGpio(int n, int level) { gpioWrite(n, level ? 1 : 0); }
 int  gpio(int n) { return (n >= 0 && n < 64) ? g_gpio[n].load() : 0; }
-
 Adc adc() {
     std::lock_guard<std::mutex> l(g_m);
     const int c = g_cfg.adcCenter;
