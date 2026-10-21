@@ -96,6 +96,8 @@ void audio_player_eq_reset(void);
 int audio_player_get_eq(audio_eq_band_t *bands); /* returns AUDIO_EQ_BANDS entries */
 int audio_player_set_rate(int hz);               /* 8000..48000, only while stopped; 0 ok */
 void audio_player_status(audio_status_t *out);
+/* Output level now: peak per channel, linear 0..1 (as sent to the amplifier, i.e. after EQ and volume). */
+void audio_player_get_vu(float *left, float *right);
 /* Sleep until the current track ends. If nothing is playing, returns the last end reason at once.
  * timeout_ms < 0 = forever. err (optional) receives the error text for AUDIO_END_ERROR. */
 audio_end_t audio_player_wait(int64_t timeout_ms, char *err, size_t errn);

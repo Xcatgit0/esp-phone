@@ -696,3 +696,94 @@ function audio.wait(timeout_ms) end
 ---Names of the codecs this build can decode.
 ---@return string[]
 function audio.codecs() end
+
+---Output level now: peak 0..1 per channel (after EQ and volume). Falls off smoothly.
+---@return number left
+---@return number right
+function audio.getVU() end
+
+
+---@class FsEntry
+---@field name string
+---@field type "file"|"dir"
+---@field size integer?   -- absent when listed with size=false
+---@field mtime integer?
+
+---@class FsStat
+---@field type "file"|"dir"
+---@field size integer
+---@field mtime integer
+
+---@class FsListOpts
+---@field size boolean?   -- default true; false = much faster on USB
+---@field sort boolean?   -- default true (folders first, then name, case-insensitive)
+---@field max integer?    -- default 1000
+---@field hidden boolean? -- default true; false hides names starting with "."
+
+---File system. Paths are absolute ("/fs/a.txt", "/usb/music"), no ".." segments. Failures return nil, "text".
+---@class fs
+fs = {}
+---List a directory. fs.list("/") lists the mount points that exist. Second result: true if cut at opts.max.
+---@param path string
+---@param opts FsListOpts?
+---@return FsEntry[]|nil entries
+---@return boolean|string truncated_or_error
+function fs.list(path, opts) end
+---@param path string
+---@return FsStat|nil
+---@return string? err
+function fs.stat(path) end
+---@param path string
+---@return boolean
+function fs.exists(path) end
+---@param path string
+---@return boolean
+function fs.isdir(path) end
+---@param path string
+---@return boolean
+function fs.isfile(path) end
+---@param path string
+---@param parents boolean? create missing parent directories
+---@return boolean|nil ok
+---@return string? err
+function fs.mkdir(path, parents) end
+---Delete a file, or a directory (empty, or recursive=true).
+---@param path string
+---@param recursive boolean?
+---@return boolean|nil ok
+---@return string? err
+function fs.remove(path, recursive) end
+---@param from string
+---@param to string
+---@return boolean|nil ok
+---@return string? err
+function fs.rename(from, to) end
+---Copy a file (overwrites).
+---@param from string
+---@param to string
+---@return boolean|nil ok
+---@return string? err
+function fs.copy(from, to) end
+---Read a whole file. Default limit 256 KB (error "file too big" above max_bytes).
+---@param path string
+---@param max_bytes integer?
+---@return string|nil data
+---@return string? err
+function fs.read(path, max_bytes) end
+---@param path string
+---@param data string
+---@return boolean|nil ok
+---@return string? err
+function fs.write(path, data) end
+---@param path string
+---@param data string
+---@return boolean|nil ok
+---@return string? err
+function fs.append(path, data) end
+---Join path parts with exactly one "/" between them.
+---@param ... string
+---@return string
+function fs.join(...) end
+---Mount points that currently exist, e.g. { "/fs", "/usb" }.
+---@return string[]
+function fs.mounts() end

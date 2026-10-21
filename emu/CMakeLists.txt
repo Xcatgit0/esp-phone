@@ -37,7 +37,7 @@ set(DEVICE_SRC
   "${PHONE_ROOT}/src/tft_gfx.c"
   "${PHONE_ROOT}/src/wifi/lua_wifi.c")
 # optional device-side extras (each is added only if present in the project)
-foreach(extra cursor_poll.c wifi/lua_http.c audio/audio_decoder.c audio/dec_wav.c audio/dec_mp3_minimp3.c audio/audio_source.c audio/audio_player.c audio/lua_audio.c)
+foreach(extra lua_fs.c cursor_poll.c wifi/lua_http.c audio/audio_decoder.c audio/dec_wav.c audio/dec_mp3_minimp3.c audio/audio_source.c audio/audio_player.c audio/lua_audio.c)
   if(EXISTS "${PHONE_ROOT}/src/${extra}")
     list(APPEND DEVICE_SRC "${PHONE_ROOT}/src/${extra}")
   endif()

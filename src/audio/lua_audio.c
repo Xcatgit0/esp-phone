@@ -308,6 +308,15 @@ static int l_status(lua_State *L)
     return 1;
 }
 
+static int l_get_vu(lua_State *L)
+{
+    float l = 0, r = 0;
+    audio_player_get_vu(&l, &r);
+    lua_pushnumber(L, l);
+    lua_pushnumber(L, r);
+    return 2;
+}
+
 static int l_wait(lua_State *L)
 {
     lua_Number t = luaL_optnumber(L, 1, -1);
@@ -340,7 +349,7 @@ void audio_register(lua_State *L)
     audio_player_vm_reset(); /* a new VM starts from the defaults (the device would have rebooted) */
     static const luaL_Reg fns[] = {{"play", l_play},     {"stop", l_stop},     {"pause", l_pause},     {"resume", l_resume},
                                    {"volume", l_volume}, {"mono", l_mono},     {"rate", l_rate},       {"eq", l_eq},
-                                   {"eq_band", l_eq_band}, {"eq_reset", l_eq_reset}, {"status", l_status}, {"wait", l_wait},
+                                   {"eq_band", l_eq_band}, {"eq_reset", l_eq_reset}, {"status", l_status}, {"getVU", l_get_vu}, {"wait", l_wait},
                                    {"codecs", l_codecs}, {NULL, NULL}};
     luaL_newlib(L, fns);
     lua_setglobal(L, "audio");

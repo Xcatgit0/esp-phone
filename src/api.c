@@ -17,6 +17,7 @@
 #include "hr2046.h"
 #include "cursor_poll.h"
 #include "lua_http.h"
+#include "lua_fs.h"
 static gfx_font_t *lua_loaded_font = NULL;
 
 static int api_gfx_line(lua_State *L)
@@ -84,8 +85,8 @@ uint8_t dbuffer = 0;
 static int api_gfx_push(lua_State *L)
 {   
 
-    //tft_push();
-    xQueueOverwrite(pushQueue,&dbuffer);
+    tft_push();
+    //xQueueOverwrite(pushQueue,&dbuffer);
     return 0;
 }
 int api_time_millis(lua_State *L)
@@ -342,5 +343,6 @@ void API_INIT(lua_State *L) {
     wifi_http_register(L);
     cursor_poll_register(L);   // adds cursor.poll (src/cursor_poll.c)
     audio_register(L);         // adds the audio API (src/audio/lua_audio.c)
+    fs_register(L);
     LOG_INFO("LOADED");
 }

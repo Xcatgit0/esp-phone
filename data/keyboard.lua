@@ -1,3 +1,4 @@
+local browse = require "browse"
 ---@param proc Process
 ---@param text string?
 function _G.keyboard(proc, text,holder)
@@ -15,7 +16,8 @@ function _G.keyboard(proc, text,holder)
         {"  ","q","w","e","r","t","y","u","i","o","p","[","]","\\"},
         {"CAPS","a","s","d","f","g","h","j","k","l",";","'","DONE"},
         {"SHFT","z","x","c","v","b","n","m",",",".","/","SHFT"},
-        {"~","<",">"}
+        {"~","<",">"},
+        {"BROWSE","http://192.168.1."}
     }
 
     text = text or ""
@@ -62,6 +64,8 @@ function _G.keyboard(proc, text,holder)
                 w = keyW * 0.65
             elseif keyName == "\\" then
                 w = keyW * 1.7
+            elseif keyName == "BROWSE" or keyName=="http://192.168.1." then
+                w = keyW * 8
             end
 
             buttons[#buttons + 1] = {
@@ -265,11 +269,11 @@ function _G.keyboard(proc, text,holder)
                     -- ไม่ทำอะไร
                     -- เพราะ "~" เป็นปุ่ม space จริง
                     -- ส่วนสองปุ่มนี้ใช้เป็น layout spacer
-
+                elseif keyName == "BROWSE" then
+                    text = text .. browse(proc).name
                 ----------------------------------------------------
                 -- CHARACTER
                 ----------------------------------------------------
-
                 else
                     local charToAppend = keyName
 

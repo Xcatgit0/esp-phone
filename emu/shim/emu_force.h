@@ -16,6 +16,8 @@ void  emu_free(void *p);
 #ifdef __cplusplus
 }
 #endif
+/* lua_fs.c: map /fs and /usb onto host folders (returns NULL for anything else) */
+#define EMU_FS_MAP 1
 #define fopen(p, m)      emu_fopen((p), (m))
 #define freopen(p, m, f) emu_freopen((p), (m), (f))
 #ifdef EMU_TRACK_ALLOC

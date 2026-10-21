@@ -172,8 +172,10 @@ return function(proc)
 
                     if waitTouch() then
                         wifi.sta.disconnect()
+                        wifi.stop()
                         connect = false
                     end
+                    proc:delay(1000)
                 end
             else
                 proc:delay(16.667)

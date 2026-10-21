@@ -35,6 +35,7 @@
 #define AUDIO_TASK_CORE 0 /* Lua runs on core 1 */
 #endif
 #define AUDIO_IN_BUF 16384
+#define AUDIO_VU_RELEASE_MS 220.0f /* time constant of the VU fall-off */
 #define AUDIO_OUT_CHUNK 512 /* frames per audio_out_write() */
 #define AUDIO_RAMP_FRAMES 441 /* volume changes ramp over ~10 ms (no zipper noise) */
 #define AUDIO_VOLUME_DEFAULT 0.5f
@@ -95,6 +96,8 @@ static struct
     audio_end_t last_end;
     char last_err[96];
     audio_source_t *cur_src;
+    float vu[2];     /* peak level 0..1 of the last output chunk, decays with AUDIO_VU_RELEASE_MS */
+    int64_t vu_ts;   /* esp_timer time (us) of that value */
 } P;
 
 static void signal_q(QueueHandle_t q)
@@ -208,6 +211,26 @@ static bool flush_out(track_t *t)
     }
     size_t n = t->out_n;
     t->out_n = 0;
+    {
+        /* VU: peak of this chunk, as sent to the amplifier (after EQ / volume) */
+        int pl = 0, pr = 0;
+        for (size_t i = 0; i < n; i++)
+        {
+            int l = t->out[i * 2], r = t->out[i * 2 + 1];
+            if (l < 0) l = -l;
+            if (r < 0) r = -r;
+            if (l > pl) pl = l;
+            if (r > pr) pr = r;
+        }
+        const int64_t now = esp_timer_get_time();
+        xSemaphoreTake(P.lock, portMAX_DELAY);
+        const float k = expf(-(float)(now - P.vu_ts) / (1000.0f * AUDIO_VU_RELEASE_MS));
+        const float nl = (float)pl / 32768.0f, nr = (float)pr / 32768.0f;
+        P.vu[0] = nl > P.vu[0] * k ? nl : P.vu[0] * k;
+        P.vu[1] = nr > P.vu[1] * k ? nr : P.vu[1] * k;
+        P.vu_ts = now;
+        xSemaphoreGive(P.lock);
+    }
     if (audio_out_write(t->out, n) != ESP_OK)
     {
         snprintf(t->err, sizeof(t->err), "audio output write failed");
@@ -989,4 +1012,16 @@ void audio_player_vm_reset(void)
     P.last_end = AUDIO_END_STOPPED;
     P.error[0] = 0;
     xSemaphoreGive(P.lock);
+}
+
+/* Current output level (peak, linear 0..1) per channel. It falls off smoothly when nothing is being played. */
+void audio_player_get_vu(float *left, float *right)
+{
+    const int64_t now = esp_timer_get_time();
+    xSemaphoreTake(P.lock, portMAX_DELAY);
+    const float k = expf(-(float)(now - P.vu_ts) / (1000.0f * AUDIO_VU_RELEASE_MS));
+    const float l = P.vu[0] * k, r = P.vu[1] * k;
+    xSemaphoreGive(P.lock);
+    if (left) *left = l;
+    if (right) *right = r;
 }

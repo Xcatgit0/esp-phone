@@ -1,7 +1,7 @@
 function FILL(r,filled) 
     gfx.rect(0,0,320,240,r,filled or true)
 end
-loadfile("/fs/keyboard.lua")()
+
 button.init()
 gfx.loadfont("/fs/font.psf")
 local W = 320
@@ -17,6 +17,7 @@ function _G.require(name)
     _G.loaded[name] = lib
     return lib
 end
+loadfile("/fs/keyboard.lua")()
 local touch = require("touch")
 touch.recalibrate()
 local colors = {

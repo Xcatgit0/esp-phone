@@ -4,7 +4,7 @@
 #include <cstring>
 #include <string>
 #include <unistd.h>
-#include <csignal>
+
 #ifndef EMU_DEFAULT_ROOT
 #define EMU_DEFAULT_ROOT ".."
 #endif
@@ -15,6 +15,7 @@ static void usage() {
 "\n"
 "  --root DIR          phone project root (default: " EMU_DEFAULT_ROOT ")\n"
 "  --fs DIR            directory mapped to /fs (default: <root>/data)\n"
+"  --usb DIR           directory mapped to /usb (default: <root>/usb)\n"
 "  --boot FILE         boot script (host path) instead of /fs/bootstrap.lua\n"
 "  --run FILE          same as --boot (handy for test scripts using the `emu` table)\n"
 "  --scale N           LCD scale factor (default 2)\n"
@@ -31,14 +32,8 @@ static void usage() {
 "\n"
 "keys: arrows=joy1 WASD=joy2 space/enter=stick buttons 1 2 3=KEY1..3 F5=reset F12=shot Esc=quit");
 }
-int rc;
-void handl(int sig) {
-        fflush(stdout); fflush(stderr);
-    _Exit(rc);   // device tasks (e.g. the wifi.http worker) are detached threads that never return
-    exit(0);
-}
+
 int main(int argc, char **argv) {
-    signal(SIGINT,handl);
     emu::Options o;
     o.root = EMU_DEFAULT_ROOT;
     auto need = [&](int &i) -> const char * {
@@ -50,6 +45,7 @@ int main(int argc, char **argv) {
         if (a == "-h" || a == "--help") { usage(); return 0; }
         else if (a == "--root") o.root = need(i);
         else if (a == "--fs") o.fsDir = need(i);
+        else if (a == "--usb") o.usbDir = need(i);
         else if (a == "--boot") o.bootstrap = need(i);
         else if (a == "--run") o.runScript = need(i);
         else if (a == "--scale") o.scale = atoi(need(i));
@@ -77,7 +73,7 @@ int main(int argc, char **argv) {
         } else { fprintf(stderr, "unknown option %s (try --help)\n", a.c_str()); return 2; }
     }
     if (o.fsDir.empty()) o.fsDir = o.root + "/data";
-    rc = emu::run(o);
+    int rc = emu::run(o);
     fflush(stdout); fflush(stderr);
     _Exit(rc);   // device tasks (e.g. the wifi.http worker) are detached threads that never return
 }

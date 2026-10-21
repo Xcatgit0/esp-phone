@@ -49,10 +49,25 @@ void log(const char *fmt, ...) {
     va_end(ap);
 }
 
+static std::string usbDir() { return g_opt.usbDir.empty() ? g_opt.root + "/usb" : g_opt.usbDir; }
+
 std::string fsPath(const std::string &p) {
     if (p.rfind("/fs/", 0) == 0) return g_opt.fsDir + p.substr(3);
     if (p == "/fs")             return g_opt.fsDir;
+    if (p.rfind("/usb/", 0) == 0) return usbDir() + p.substr(4);
+    if (p == "/usb")            return usbDir();
     return p;
+}
+
+/* lua_fs.c in the emulator: only /fs and /usb are reachable (the host file system is not exposed) */
+extern "C" const char *emu_fs_path(const char *in, char *out, size_t n) {
+    std::string s(in);
+    bool ok = s == "/fs" || s.rfind("/fs/", 0) == 0 || s == "/usb" || s.rfind("/usb/", 0) == 0;
+    if (!ok) return nullptr;
+    std::string r = fsPath(s);
+    if (r.size() >= n) return nullptr;
+    memcpy(out, r.c_str(), r.size() + 1);
+    return out;
 }
 
 /* ------------------------------------------------------------------ heap */
@@ -391,6 +406,7 @@ bool touchDown() { std::lock_guard<std::mutex> l(g_m); return g_touch; }
 void touchPos(float &sx, float &sy) { std::lock_guard<std::mutex> l(g_m); sx = g_tx; sy = g_ty; }
 void setGpio(int n, int level) { gpioWrite(n, level ? 1 : 0); }
 int  gpio(int n) { return (n >= 0 && n < 64) ? g_gpio[n].load() : 0; }
+
 Adc adc() {
     std::lock_guard<std::mutex> l(g_m);
     const int c = g_cfg.adcCenter;

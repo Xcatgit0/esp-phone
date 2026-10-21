@@ -1115,6 +1115,30 @@ mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/lua/lzio.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/phone_lua.dir/build.make CMakeFiles/phone_lua.dir/mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/lua/lzio.c.s
 .PHONY : mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/lua/lzio.c.s
 
+mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/lua_fs.o: mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/lua_fs.c.o
+.PHONY : mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/lua_fs.o
+
+# target to build an object file
+mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/lua_fs.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/phone_device.dir/build.make CMakeFiles/phone_device.dir/mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/lua_fs.c.o
+.PHONY : mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/lua_fs.c.o
+
+mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/lua_fs.i: mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/lua_fs.c.i
+.PHONY : mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/lua_fs.i
+
+# target to preprocess a source file
+mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/lua_fs.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/phone_device.dir/build.make CMakeFiles/phone_device.dir/mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/lua_fs.c.i
+.PHONY : mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/lua_fs.c.i
+
+mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/lua_fs.s: mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/lua_fs.c.s
+.PHONY : mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/lua_fs.s
+
+# target to generate assembly for a file
+mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/lua_fs.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/phone_device.dir/build.make CMakeFiles/phone_device.dir/mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/lua_fs.c.s
+.PHONY : mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/lua_fs.c.s
+
 mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/tft_gfx.o: mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/tft_gfx.c.o
 .PHONY : mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/tft_gfx.o
 
@@ -1558,6 +1582,9 @@ help:
 	@echo "... mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/lua/lzio.o"
 	@echo "... mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/lua/lzio.i"
 	@echo "... mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/lua/lzio.s"
+	@echo "... mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/lua_fs.o"
+	@echo "... mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/lua_fs.i"
+	@echo "... mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/lua_fs.s"
 	@echo "... mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/tft_gfx.o"
 	@echo "... mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/tft_gfx.i"
 	@echo "... mnt/c/Users/ASUS/Documents/PlatformIO/Projects/phone/src/tft_gfx.s"

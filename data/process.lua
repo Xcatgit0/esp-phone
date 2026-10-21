@@ -144,7 +144,7 @@ local proc = {
     end
 
 
-    local func, err = load(code,"="..name)
+    local func, err = load(code,"@"..file)
 
     if not func then
         error(err)

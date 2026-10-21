@@ -37,7 +37,7 @@ struct Config {
     // device code: primary x > 2800 => cursor_x--, y > 2800 => cursor_y++
     bool  j1InvertX    = true;   // stick right => ADC low => cursor right
     bool  j1InvertY    = false;
-    bool  j2InvertX    = true;
+    bool  j2InvertX    = false;
     bool  j2InvertY    = false;
 };
 Config &config();
@@ -113,6 +113,7 @@ void setAudioSink(const std::string &spec);
 struct Options {
     std::string root;            // phone project root (default: parent of emu/)
     std::string fsDir;           // what "/fs" maps to (default: <root>/data)
+    std::string usbDir;          // what "/usb" maps to (default: <root>/usb)
     std::string bootstrap;       // override boot script (host path); default /fs/bootstrap.lua
     std::string runScript;       // headless test script (host path) run after boot, see `emu` table
     std::string shotPath;        // screenshot on exit

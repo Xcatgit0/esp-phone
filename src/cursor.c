@@ -131,14 +131,15 @@ void cursor_task(void *arg)
         {
             draw_cursor();
         }
-        if (cursor_x < 0)
-            cursor_x = 0;
-        if (cursor_x > LCD_WIDTH)
-            cursor_x = LCD_WIDTH;
-        if (cursor_y < 0)
-            cursor_y = 0;
-        if (cursor_y > LCD_HEIGHT)
-            cursor_y = LCD_HEIGHT;
+if (cursor_x < 0)
+    cursor_x = 0;
+if (cursor_x > LCD_WIDTH - 16)
+    cursor_x = LCD_WIDTH - 16;
+
+if (cursor_y < 0)
+    cursor_y = 0;
+if (cursor_y > LCD_HEIGHT - 16)
+    cursor_y = LCD_HEIGHT - 16;
         oldX = cursor_x;
         oldY = cursor_y;
         vTaskDelay(pdMS_TO_TICKS(16));

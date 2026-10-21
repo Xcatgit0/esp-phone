@@ -86,7 +86,8 @@ local prog = {
     "Dummy 2",
     "Dummy 3",
     "Dummy 4",
-    "snake"
+    "snake",
+    "dir"
 }
 
 local nonelogo =

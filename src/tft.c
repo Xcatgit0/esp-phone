@@ -131,9 +131,10 @@ esp_err_t tft_init(void)
 
     ESP_ERROR_CHECK(
         esp_lcd_panel_reset(panel));
-
+    LOG_INFO("TFT: Init");
     ESP_ERROR_CHECK(
         esp_lcd_panel_init(panel));
+    LOG_INFO("TFT: Configuring");
         //ESP_ERROR_CHECK(esp_lcd_panel_io_tx_param(io_handle, 0x21, NULL, 0)); // INVON
     ESP_ERROR_CHECK(esp_lcd_panel_io_tx_param(io_handle, 0xB0, (uint8_t[]){0x00,0xE8}, 2));
     ESP_ERROR_CHECK(esp_lcd_panel_swap_xy(panel, true));
@@ -197,32 +198,122 @@ void tft_draw_pixel(
     framebuffer[y * LCD_WIDTH + x] = tft_convert_color(color);
 }
 
+
 /* --------------------------------------------------
  * Send framebuffer → TFT
  * -------------------------------------------------- */
 uint8_t event = 1;
+uint8_t tft_down = 0;
+
 void tft_push(void)
 {
+    if (tft_down == 1) return;
+
     if (xSemaphoreTake(push_mutex, portMAX_DELAY) == pdTRUE) {
-    // ได้ lock แล้ว
-    if(trans_done_sem!=NULL)xSemaphoreTake(trans_done_sem, portMAX_DELAY);   
-    //LOG_INFO("PUSH");
-    ESP_ERROR_CHECK(
-        esp_lcd_panel_draw_bitmap(
+
+        if (trans_done_sem != NULL)
+            xSemaphoreTake(trans_done_sem, portMAX_DELAY);
+
+        esp_err_t err = esp_lcd_panel_draw_bitmap(
             panel,
-
-            0,
-            0,
-
+            0, 0,
             LCD_WIDTH,
             LCD_HEIGHT,
+            framebuffer
+        );
 
-            framebuffer));
+        if (err != ESP_OK) {
+            tft_down = 1;
+
+            LOG_INFO("TFT: DRAW FAILED: %s", esp_err_to_name(err));
+            LOG_INFO("TFT: RECOVERY START");
+
+            // STEP 1: Reset panel
+            LOG_INFO("TFT RECOVERY [1/7]: Reset panel...");
+            err = esp_lcd_panel_reset(panel);
+            LOG_INFO("TFT RECOVERY [1/7]: Reset = %s",
+                     esp_err_to_name(err));
+
+            // STEP 2: Initialize panel
+            if (err == ESP_OK) {
+                LOG_INFO("TFT RECOVERY [2/7]: Init panel...");
+                err = esp_lcd_panel_init(panel);
+                LOG_INFO("TFT RECOVERY [2/7]: Init = %s",
+                         esp_err_to_name(err));
+            } else {
+                LOG_INFO("TFT RECOVERY [2/7]: SKIPPED");
+            }
+
+            // STEP 3: Send parameter B0
+            if (err == ESP_OK) {
+                LOG_INFO("TFT RECOVERY [3/7]: Send B0...");
+                err = esp_lcd_panel_io_tx_param(
+                    io_handle, 0xB0, (uint8_t[]){0x00, 0xE8}, 2
+                );
+                LOG_INFO("TFT RECOVERY [3/7]: B0 = %s",
+                         esp_err_to_name(err));
+            } else {
+                LOG_INFO("TFT RECOVERY [3/7]: SKIPPED");
+            }
+
+            // STEP 4: Swap XY
+            if (err == ESP_OK) {
+                LOG_INFO("TFT RECOVERY [4/7]: Swap XY...");
+                err = esp_lcd_panel_swap_xy(panel, true);
+                LOG_INFO("TFT RECOVERY [4/7]: Swap XY = %s",
+                         esp_err_to_name(err));
+            } else {
+                LOG_INFO("TFT RECOVERY [4/7]: SKIPPED");
+            }
+
+            // STEP 5: Mirror
+            if (err == ESP_OK) {
+                LOG_INFO("TFT RECOVERY [5/7]: Mirror...");
+                err = esp_lcd_panel_mirror(panel, true, false);
+                LOG_INFO("TFT RECOVERY [5/7]: Mirror = %s",
+                         esp_err_to_name(err));
+            } else {
+                LOG_INFO("TFT RECOVERY [5/7]: SKIPPED");
+            }
+
+            // STEP 6: Set gap
+            if (err == ESP_OK) {
+                LOG_INFO("TFT RECOVERY [6/7]: Set gap...");
+                err = esp_lcd_panel_set_gap(panel, 0, 0);
+                LOG_INFO("TFT RECOVERY [6/7]: Set gap = %s",
+                         esp_err_to_name(err));
+            } else {
+                LOG_INFO("TFT RECOVERY [6/7]: SKIPPED");
+            }
+
+            // STEP 7: Turn display on
+            if (err == ESP_OK) {
+                LOG_INFO("TFT RECOVERY [7/7]: Display ON...");
+                err = esp_lcd_panel_disp_on_off(panel, true);
+                LOG_INFO("TFT RECOVERY [7/7]: Display ON = %s",
+                         esp_err_to_name(err));
+            } else {
+                LOG_INFO("TFT RECOVERY [7/7]: SKIPPED");
+            }
+
+            if (err == ESP_OK) {
+                LOG_INFO("TFT: RECOVERY SUCCESS");
+                tft_down = 0;
+            } else {
+                LOG_INFO("TFT: RECOVERY FAILED at last executed step: %s",
+                         esp_err_to_name(err));
+                abort();
+            }
         }
-    xSemaphoreGive(push_mutex);
-    if(drawCursorQueue!=NULL){xQueueOverwrite(drawCursorQueue,&event);};
-        //draw_cursor();
-        return;
+
+        xSemaphoreGive(push_mutex);
+    }
+
+    if (drawCursorQueue != NULL) {
+        xQueueOverwrite(drawCursorQueue, &event);
+    }
+
+    return;
 }
 
 /* --------------------------------------------------

@@ -74,7 +74,7 @@ static esp_err_t storage_mount(void)
     esp_vfs_spiffs_conf_t conf = {
         .base_path              = STORAGE_MOUNT_POINT,
         .partition_label        = STORAGE_PARTITION_LABEL,
-        .max_files               = 16,
+        .max_files               = 32,
         .format_if_mount_failed = false,
     };
 

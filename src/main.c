@@ -11,6 +11,7 @@
 #include "esp_vfs.h"
 #include "wrap.h"
 #include "http_server.h"
+#include "esp_log.h"
 #define EEC ESP_ERROR_CHECK
 void list_spiffs(void)
 {
@@ -69,12 +70,14 @@ static void *lua_psram_alloc(
     }
     return heap_caps_realloc(ptr,nsize,MALLOC_CAP_SPIRAM|MALLOC_CAP_8BIT);
 }
+extern void usb_main();
 void app_main(void)
 {
+    ESP_LOGE("RESET", "Reset Reasob = %d",esp_reset_reason());
     esp_vfs_spiffs_conf_t conf = {
         .base_path = "/fs",
         .partition_label = "storage",
-        .max_files = 16,
+        .max_files = 32,
         .format_if_mount_failed = true,
     };
 
@@ -86,6 +89,8 @@ void app_main(void)
         esp_spiffs_info("storage", &total, &used));
     LOG_INFO("SPIFFS: %zu / %zu bytes", used, total);
     list_spiffs();
+    LOG_INFO("USB: initializing");
+    usb_main();
     LOG_INFO("Initializing tft");
     tft_init();
     LOG_INFO("Initializing Joystick and Cursor");
